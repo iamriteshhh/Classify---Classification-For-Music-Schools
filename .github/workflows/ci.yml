@@ -99,7 +99,12 @@ jobs:
         run: |
           python -c "
           from classify.ml.inference import load_artifacts
-          model, scaler, genres, subgenres = load_artifacts()
+          from classify.ml.subgenre_classifier import SUBGENRE_PROFILES
+          artifacts = load_artifacts()
+          model = artifacts['model']
+          scaler = artifacts['scaler']
+          genres = list(artifacts['encoder'].classes_)
+          subgenres = SUBGENRE_PROFILES
           print(f'Loaded model class: {type(model).__name__}')
           print(f'Primary genres ({len(genres)}): {genres}')
           print(f'Subgenre taxonomy count: {len(subgenres)}')
@@ -111,7 +116,7 @@ jobs:
         env:
           FLASK_ENV: testing
         run: |
-          pytest tests/test_ml_accuracy_phase0.py tests/test_deeper_ml_phase1.py -v
+          pytest tests/test_classification.py tests/test_inference_parity.py -v
 
   security-audit:
     name: Security & Vulnerability Scan
