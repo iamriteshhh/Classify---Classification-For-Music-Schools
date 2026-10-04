@@ -7,11 +7,16 @@ Hardened per Security Specification (security.md) and Final Design (final_design
 """
 
 import os
+import mimetypes
 import click
 import logging
 from flask import Flask, render_template, request, jsonify
 from config import config_by_name, DevelopmentConfig
 from classify.extensions import db, migrate, login_manager, csrf, limiter, mail
+
+# Explicitly guarantee proper MIME types on Windows platforms (prevents nosniff CSS blocking)
+mimetypes.add_type("text/css", ".css")
+mimetypes.add_type("application/javascript", ".js")
 
 logger = logging.getLogger(__name__)
 
@@ -46,6 +51,7 @@ def create_app(config_name_or_class=None):
         __name__,
         template_folder=template_folder,
         static_folder=static_folder,
+        static_url_path="/static",
     )
 
     # Resolve configuration
