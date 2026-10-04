@@ -1,0 +1,1041 @@
+{
+  "summary": {
+    "total_test_samples": 158,
+    "total_misclassified": 44,
+    "error_rate": 0.2785,
+    "top_confusion_pairs": [
+      {
+        "true_genre": "Hip-Hop",
+        "predicted_genre": "Reggae",
+        "count": 4
+      },
+      {
+        "true_genre": "Rock",
+        "predicted_genre": "Country",
+        "count": 4
+      },
+      {
+        "true_genre": "Rock",
+        "predicted_genre": "Disco",
+        "count": 3
+      },
+      {
+        "true_genre": "Ambient",
+        "predicted_genre": "Classical",
+        "count": 3
+      },
+      {
+        "true_genre": "Country",
+        "predicted_genre": "Rock",
+        "count": 2
+      },
+      {
+        "true_genre": "Blues",
+        "predicted_genre": "Ambient",
+        "count": 1
+      },
+      {
+        "true_genre": "Country",
+        "predicted_genre": "Jazz",
+        "count": 1
+      },
+      {
+        "true_genre": "Disco",
+        "predicted_genre": "Reggae",
+        "count": 1
+      },
+      {
+        "true_genre": "Disco",
+        "predicted_genre": "Hip-Hop",
+        "count": 1
+      },
+      {
+        "true_genre": "Disco",
+        "predicted_genre": "Rock",
+        "count": 1
+      }
+    ],
+    "errors_by_true_genre": {
+      "Blues": 3,
+      "Country": 6,
+      "Disco": 3,
+      "Hip-Hop": 6,
+      "Metal": 2,
+      "Pop": 3,
+      "Reggae": 4,
+      "Rock": 10,
+      "Jazz": 1,
+      "Ambient": 6
+    }
+  },
+  "misclassified_tracks": [
+    {
+      "track_id": "gtzan_blues_00045",
+      "track_path": "datasets/processed/gtzan_blues_blues.00045.wav",
+      "true_genre": "Blues",
+      "predicted_genre": "Ambient",
+      "top_3_probs": [
+        {
+          "genre": "Ambient",
+          "prob": 0.3503
+        },
+        {
+          "genre": "Blues",
+          "prob": 0.3412
+        },
+        {
+          "genre": "Metal",
+          "prob": 0.0557
+        }
+      ],
+      "artist_id": "gtzan_proxy_blues_011",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_country_00029",
+      "track_path": "datasets/processed/gtzan_country_country.00029.wav",
+      "true_genre": "Country",
+      "predicted_genre": "Jazz",
+      "top_3_probs": [
+        {
+          "genre": "Jazz",
+          "prob": 0.689
+        },
+        {
+          "genre": "Country",
+          "prob": 0.1189
+        },
+        {
+          "genre": "Classical",
+          "prob": 0.0579
+        }
+      ],
+      "artist_id": "gtzan_proxy_country_007",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_disco_00025",
+      "track_path": "datasets/processed/gtzan_disco_disco.00025.wav",
+      "true_genre": "Disco",
+      "predicted_genre": "Reggae",
+      "top_3_probs": [
+        {
+          "genre": "Reggae",
+          "prob": 0.3902
+        },
+        {
+          "genre": "Disco",
+          "prob": 0.3154
+        },
+        {
+          "genre": "Pop",
+          "prob": 0.1713
+        }
+      ],
+      "artist_id": "gtzan_proxy_disco_006",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_disco_00027",
+      "track_path": "datasets/processed/gtzan_disco_disco.00027.wav",
+      "true_genre": "Disco",
+      "predicted_genre": "Hip-Hop",
+      "top_3_probs": [
+        {
+          "genre": "Hip-Hop",
+          "prob": 0.677
+        },
+        {
+          "genre": "Reggae",
+          "prob": 0.2782
+        },
+        {
+          "genre": "Disco",
+          "prob": 0.0337
+        }
+      ],
+      "artist_id": "gtzan_proxy_disco_006",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_disco_00073",
+      "track_path": "datasets/processed/gtzan_disco_disco.00073.wav",
+      "true_genre": "Disco",
+      "predicted_genre": "Rock",
+      "top_3_probs": [
+        {
+          "genre": "Rock",
+          "prob": 0.606
+        },
+        {
+          "genre": "Disco",
+          "prob": 0.3309
+        },
+        {
+          "genre": "Hip-Hop",
+          "prob": 0.0144
+        }
+      ],
+      "artist_id": "gtzan_proxy_disco_018",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_hiphop_00013",
+      "track_path": "datasets/processed/gtzan_hiphop_hiphop.00013.wav",
+      "true_genre": "Hip-Hop",
+      "predicted_genre": "Reggae",
+      "top_3_probs": [
+        {
+          "genre": "Reggae",
+          "prob": 0.2969
+        },
+        {
+          "genre": "Rock",
+          "prob": 0.1829
+        },
+        {
+          "genre": "Hip-Hop",
+          "prob": 0.1782
+        }
+      ],
+      "artist_id": "gtzan_proxy_hiphop_003",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_hiphop_00014",
+      "track_path": "datasets/processed/gtzan_hiphop_hiphop.00014.wav",
+      "true_genre": "Hip-Hop",
+      "predicted_genre": "Metal",
+      "top_3_probs": [
+        {
+          "genre": "Metal",
+          "prob": 0.9508
+        },
+        {
+          "genre": "Hip-Hop",
+          "prob": 0.0122
+        },
+        {
+          "genre": "Disco",
+          "prob": 0.0077
+        }
+      ],
+      "artist_id": "gtzan_proxy_hiphop_003",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_hiphop_00015",
+      "track_path": "datasets/processed/gtzan_hiphop_hiphop.00015.wav",
+      "true_genre": "Hip-Hop",
+      "predicted_genre": "Disco",
+      "top_3_probs": [
+        {
+          "genre": "Disco",
+          "prob": 0.7122
+        },
+        {
+          "genre": "Hip-Hop",
+          "prob": 0.1037
+        },
+        {
+          "genre": "Reggae",
+          "prob": 0.0582
+        }
+      ],
+      "artist_id": "gtzan_proxy_hiphop_003",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_hiphop_00042",
+      "track_path": "datasets/processed/gtzan_hiphop_hiphop.00042.wav",
+      "true_genre": "Hip-Hop",
+      "predicted_genre": "Reggae",
+      "top_3_probs": [
+        {
+          "genre": "Reggae",
+          "prob": 0.5899
+        },
+        {
+          "genre": "Hip-Hop",
+          "prob": 0.2367
+        },
+        {
+          "genre": "Pop",
+          "prob": 0.0774
+        }
+      ],
+      "artist_id": "gtzan_proxy_hiphop_010",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_metal_00091",
+      "track_path": "datasets/processed/gtzan_metal_metal.00091.wav",
+      "true_genre": "Metal",
+      "predicted_genre": "Rock",
+      "top_3_probs": [
+        {
+          "genre": "Rock",
+          "prob": 0.7464
+        },
+        {
+          "genre": "Country",
+          "prob": 0.0737
+        },
+        {
+          "genre": "Disco",
+          "prob": 0.0644
+        }
+      ],
+      "artist_id": "gtzan_proxy_metal_022",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_pop_00098",
+      "track_path": "datasets/processed/gtzan_pop_pop.00098.wav",
+      "true_genre": "Pop",
+      "predicted_genre": "Disco",
+      "top_3_probs": [
+        {
+          "genre": "Disco",
+          "prob": 0.5668
+        },
+        {
+          "genre": "Pop",
+          "prob": 0.303
+        },
+        {
+          "genre": "Reggae",
+          "prob": 0.0723
+        }
+      ],
+      "artist_id": "gtzan_proxy_pop_024",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_reggae_00000",
+      "track_path": "datasets/processed/gtzan_reggae_reggae.00000.wav",
+      "true_genre": "Reggae",
+      "predicted_genre": "Country",
+      "top_3_probs": [
+        {
+          "genre": "Country",
+          "prob": 0.5465
+        },
+        {
+          "genre": "Disco",
+          "prob": 0.1875
+        },
+        {
+          "genre": "Blues",
+          "prob": 0.1206
+        }
+      ],
+      "artist_id": "gtzan_proxy_reggae_000",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_reggae_00001",
+      "track_path": "datasets/processed/gtzan_reggae_reggae.00001.wav",
+      "true_genre": "Reggae",
+      "predicted_genre": "Rock",
+      "top_3_probs": [
+        {
+          "genre": "Rock",
+          "prob": 0.7043
+        },
+        {
+          "genre": "Pop",
+          "prob": 0.0706
+        },
+        {
+          "genre": "Country",
+          "prob": 0.0668
+        }
+      ],
+      "artist_id": "gtzan_proxy_reggae_000",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_reggae_00055",
+      "track_path": "datasets/processed/gtzan_reggae_reggae.00055.wav",
+      "true_genre": "Reggae",
+      "predicted_genre": "Disco",
+      "top_3_probs": [
+        {
+          "genre": "Disco",
+          "prob": 0.325
+        },
+        {
+          "genre": "Hip-Hop",
+          "prob": 0.2258
+        },
+        {
+          "genre": "Reggae",
+          "prob": 0.1533
+        }
+      ],
+      "artist_id": "gtzan_proxy_reggae_013",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_rock_00069",
+      "track_path": "datasets/processed/gtzan_rock_rock.00069.wav",
+      "true_genre": "Rock",
+      "predicted_genre": "Country",
+      "top_3_probs": [
+        {
+          "genre": "Country",
+          "prob": 0.5482
+        },
+        {
+          "genre": "Rock",
+          "prob": 0.1947
+        },
+        {
+          "genre": "Ambient",
+          "prob": 0.0938
+        }
+      ],
+      "artist_id": "gtzan_proxy_rock_017",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_rock_00070",
+      "track_path": "datasets/processed/gtzan_rock_rock.00070.wav",
+      "true_genre": "Rock",
+      "predicted_genre": "Country",
+      "top_3_probs": [
+        {
+          "genre": "Country",
+          "prob": 0.6958
+        },
+        {
+          "genre": "Rock",
+          "prob": 0.1515
+        },
+        {
+          "genre": "Blues",
+          "prob": 0.0576
+        }
+      ],
+      "artist_id": "gtzan_proxy_rock_017",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_blues_00005",
+      "track_path": "datasets/processed/gtzan_blues_blues.00005.wav",
+      "true_genre": "Blues",
+      "predicted_genre": "Rock",
+      "top_3_probs": [
+        {
+          "genre": "Rock",
+          "prob": 0.7961
+        },
+        {
+          "genre": "Reggae",
+          "prob": 0.0507
+        },
+        {
+          "genre": "Classical",
+          "prob": 0.0315
+        }
+      ],
+      "artist_id": "gtzan_proxy_blues_001",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_country_00005",
+      "track_path": "datasets/processed/gtzan_country_country.00005.wav",
+      "true_genre": "Country",
+      "predicted_genre": "Disco",
+      "top_3_probs": [
+        {
+          "genre": "Disco",
+          "prob": 0.3582
+        },
+        {
+          "genre": "Pop",
+          "prob": 0.2019
+        },
+        {
+          "genre": "Rock",
+          "prob": 0.1229
+        }
+      ],
+      "artist_id": "gtzan_proxy_country_001",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_country_00006",
+      "track_path": "datasets/processed/gtzan_country_country.00006.wav",
+      "true_genre": "Country",
+      "predicted_genre": "Rock",
+      "top_3_probs": [
+        {
+          "genre": "Rock",
+          "prob": 0.3968
+        },
+        {
+          "genre": "Disco",
+          "prob": 0.279
+        },
+        {
+          "genre": "Country",
+          "prob": 0.1161
+        }
+      ],
+      "artist_id": "gtzan_proxy_country_001",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_country_00009",
+      "track_path": "datasets/processed/gtzan_country_country.00009.wav",
+      "true_genre": "Country",
+      "predicted_genre": "Rock",
+      "top_3_probs": [
+        {
+          "genre": "Rock",
+          "prob": 0.3607
+        },
+        {
+          "genre": "Ambient",
+          "prob": 0.1495
+        },
+        {
+          "genre": "Pop",
+          "prob": 0.1013
+        }
+      ],
+      "artist_id": "gtzan_proxy_country_002",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_country_00011",
+      "track_path": "datasets/processed/gtzan_country_country.00011.wav",
+      "true_genre": "Country",
+      "predicted_genre": "Pop",
+      "top_3_probs": [
+        {
+          "genre": "Pop",
+          "prob": 0.4254
+        },
+        {
+          "genre": "Country",
+          "prob": 0.1743
+        },
+        {
+          "genre": "Reggae",
+          "prob": 0.1183
+        }
+      ],
+      "artist_id": "gtzan_proxy_country_002",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_blues_00067",
+      "track_path": "datasets/processed/gtzan_blues_blues.00067.wav",
+      "true_genre": "Blues",
+      "predicted_genre": "Country",
+      "top_3_probs": [
+        {
+          "genre": "Country",
+          "prob": 0.3014
+        },
+        {
+          "genre": "Rock",
+          "prob": 0.2612
+        },
+        {
+          "genre": "Blues",
+          "prob": 0.1951
+        }
+      ],
+      "artist_id": "gtzan_proxy_blues_016",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_country_00030",
+      "track_path": "datasets/processed/gtzan_country_country.00030.wav",
+      "true_genre": "Country",
+      "predicted_genre": "Ambient",
+      "top_3_probs": [
+        {
+          "genre": "Ambient",
+          "prob": 0.4918
+        },
+        {
+          "genre": "Classical",
+          "prob": 0.138
+        },
+        {
+          "genre": "Country",
+          "prob": 0.109
+        }
+      ],
+      "artist_id": "gtzan_proxy_country_007",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_hiphop_00040",
+      "track_path": "datasets/processed/gtzan_hiphop_hiphop.00040.wav",
+      "true_genre": "Hip-Hop",
+      "predicted_genre": "Reggae",
+      "top_3_probs": [
+        {
+          "genre": "Reggae",
+          "prob": 0.2984
+        },
+        {
+          "genre": "Hip-Hop",
+          "prob": 0.2179
+        },
+        {
+          "genre": "Pop",
+          "prob": 0.1944
+        }
+      ],
+      "artist_id": "gtzan_proxy_hiphop_010",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_hiphop_00043",
+      "track_path": "datasets/processed/gtzan_hiphop_hiphop.00043.wav",
+      "true_genre": "Hip-Hop",
+      "predicted_genre": "Reggae",
+      "top_3_probs": [
+        {
+          "genre": "Reggae",
+          "prob": 0.4802
+        },
+        {
+          "genre": "Hip-Hop",
+          "prob": 0.2139
+        },
+        {
+          "genre": "Ambient",
+          "prob": 0.2004
+        }
+      ],
+      "artist_id": "gtzan_proxy_hiphop_010",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_jazz_00087",
+      "track_path": "datasets/processed/gtzan_jazz_jazz.00087.wav",
+      "true_genre": "Jazz",
+      "predicted_genre": "Ambient",
+      "top_3_probs": [
+        {
+          "genre": "Ambient",
+          "prob": 0.6294
+        },
+        {
+          "genre": "Rock",
+          "prob": 0.0927
+        },
+        {
+          "genre": "Classical",
+          "prob": 0.0872
+        }
+      ],
+      "artist_id": "gtzan_proxy_jazz_021",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_metal_00088",
+      "track_path": "datasets/processed/gtzan_metal_metal.00088.wav",
+      "true_genre": "Metal",
+      "predicted_genre": "Blues",
+      "top_3_probs": [
+        {
+          "genre": "Reggae",
+          "prob": 0.3768
+        },
+        {
+          "genre": "Blues",
+          "prob": 0.3511
+        },
+        {
+          "genre": "Hip-Hop",
+          "prob": 0.1915
+        }
+      ],
+      "artist_id": "gtzan_proxy_metal_022",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_pop_00078",
+      "track_path": "datasets/processed/gtzan_pop_pop.00078.wav",
+      "true_genre": "Pop",
+      "predicted_genre": "Hip-Hop",
+      "top_3_probs": [
+        {
+          "genre": "Hip-Hop",
+          "prob": 0.6106
+        },
+        {
+          "genre": "Pop",
+          "prob": 0.2332
+        },
+        {
+          "genre": "Reggae",
+          "prob": 0.0946
+        }
+      ],
+      "artist_id": "gtzan_proxy_pop_019",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_pop_00079",
+      "track_path": "datasets/processed/gtzan_pop_pop.00079.wav",
+      "true_genre": "Pop",
+      "predicted_genre": "Rock",
+      "top_3_probs": [
+        {
+          "genre": "Rock",
+          "prob": 0.3023
+        },
+        {
+          "genre": "Reggae",
+          "prob": 0.232
+        },
+        {
+          "genre": "Country",
+          "prob": 0.1181
+        }
+      ],
+      "artist_id": "gtzan_proxy_pop_019",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_reggae_00052",
+      "track_path": "datasets/processed/gtzan_reggae_reggae.00052.wav",
+      "true_genre": "Reggae",
+      "predicted_genre": "Hip-Hop",
+      "top_3_probs": [
+        {
+          "genre": "Hip-Hop",
+          "prob": 0.6078
+        },
+        {
+          "genre": "Pop",
+          "prob": 0.152
+        },
+        {
+          "genre": "Reggae",
+          "prob": 0.1181
+        }
+      ],
+      "artist_id": "gtzan_proxy_reggae_013",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_rock_00040",
+      "track_path": "datasets/processed/gtzan_rock_rock.00040.wav",
+      "true_genre": "Rock",
+      "predicted_genre": "Disco",
+      "top_3_probs": [
+        {
+          "genre": "Disco",
+          "prob": 0.6498
+        },
+        {
+          "genre": "Reggae",
+          "prob": 0.0822
+        },
+        {
+          "genre": "Metal",
+          "prob": 0.0754
+        }
+      ],
+      "artist_id": "gtzan_proxy_rock_010",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_rock_00041",
+      "track_path": "datasets/processed/gtzan_rock_rock.00041.wav",
+      "true_genre": "Rock",
+      "predicted_genre": "Disco",
+      "top_3_probs": [
+        {
+          "genre": "Disco",
+          "prob": 0.3273
+        },
+        {
+          "genre": "Rock",
+          "prob": 0.2517
+        },
+        {
+          "genre": "Pop",
+          "prob": 0.2338
+        }
+      ],
+      "artist_id": "gtzan_proxy_rock_010",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_rock_00043",
+      "track_path": "datasets/processed/gtzan_rock_rock.00043.wav",
+      "true_genre": "Rock",
+      "predicted_genre": "Disco",
+      "top_3_probs": [
+        {
+          "genre": "Disco",
+          "prob": 0.3111
+        },
+        {
+          "genre": "Pop",
+          "prob": 0.2406
+        },
+        {
+          "genre": "Reggae",
+          "prob": 0.1417
+        }
+      ],
+      "artist_id": "gtzan_proxy_rock_010",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_rock_00044",
+      "track_path": "datasets/processed/gtzan_rock_rock.00044.wav",
+      "true_genre": "Rock",
+      "predicted_genre": "Country",
+      "top_3_probs": [
+        {
+          "genre": "Ambient",
+          "prob": 0.2141
+        },
+        {
+          "genre": "Country",
+          "prob": 0.1861
+        },
+        {
+          "genre": "Pop",
+          "prob": 0.1229
+        }
+      ],
+      "artist_id": "gtzan_proxy_rock_011",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_rock_00045",
+      "track_path": "datasets/processed/gtzan_rock_rock.00045.wav",
+      "true_genre": "Rock",
+      "predicted_genre": "Ambient",
+      "top_3_probs": [
+        {
+          "genre": "Ambient",
+          "prob": 0.716
+        },
+        {
+          "genre": "Metal",
+          "prob": 0.0861
+        },
+        {
+          "genre": "Rock",
+          "prob": 0.0697
+        }
+      ],
+      "artist_id": "gtzan_proxy_rock_011",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_rock_00047",
+      "track_path": "datasets/processed/gtzan_rock_rock.00047.wav",
+      "true_genre": "Rock",
+      "predicted_genre": "Metal",
+      "top_3_probs": [
+        {
+          "genre": "Metal",
+          "prob": 0.6107
+        },
+        {
+          "genre": "Hip-Hop",
+          "prob": 0.1023
+        },
+        {
+          "genre": "Rock",
+          "prob": 0.0862
+        }
+      ],
+      "artist_id": "gtzan_proxy_rock_011",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_rock_00089",
+      "track_path": "datasets/processed/gtzan_rock_rock.00089.wav",
+      "true_genre": "Rock",
+      "predicted_genre": "Country",
+      "top_3_probs": [
+        {
+          "genre": "Country",
+          "prob": 0.7069
+        },
+        {
+          "genre": "Rock",
+          "prob": 0.1802
+        },
+        {
+          "genre": "Disco",
+          "prob": 0.0408
+        }
+      ],
+      "artist_id": "gtzan_proxy_rock_022",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "gtzan_rock_00090",
+      "track_path": "datasets/processed/gtzan_rock_rock.00090.wav",
+      "true_genre": "Rock",
+      "predicted_genre": "Blues",
+      "top_3_probs": [
+        {
+          "genre": "Blues",
+          "prob": 0.2894
+        },
+        {
+          "genre": "Classical",
+          "prob": 0.1177
+        },
+        {
+          "genre": "Ambient",
+          "prob": 0.1038
+        }
+      ],
+      "artist_id": "gtzan_proxy_rock_022",
+      "source_dataset": "GTZAN"
+    },
+    {
+      "track_id": "fma_ambient_121472",
+      "track_path": "datasets/processed/fma_ambient_121472.mp3",
+      "true_genre": "Ambient",
+      "predicted_genre": "Classical",
+      "top_3_probs": [
+        {
+          "genre": "Classical",
+          "prob": 0.5911
+        },
+        {
+          "genre": "Jazz",
+          "prob": 0.246
+        },
+        {
+          "genre": "Ambient",
+          "prob": 0.1038
+        }
+      ],
+      "artist_id": "fma_artist_20315",
+      "source_dataset": "FMA"
+    },
+    {
+      "track_id": "fma_ambient_121473",
+      "track_path": "datasets/processed/fma_ambient_121473.mp3",
+      "true_genre": "Ambient",
+      "predicted_genre": "Reggae",
+      "top_3_probs": [
+        {
+          "genre": "Reggae",
+          "prob": 0.4698
+        },
+        {
+          "genre": "Pop",
+          "prob": 0.2069
+        },
+        {
+          "genre": "Ambient",
+          "prob": 0.1476
+        }
+      ],
+      "artist_id": "fma_artist_20315",
+      "source_dataset": "FMA"
+    },
+    {
+      "track_id": "fma_ambient_121474",
+      "track_path": "datasets/processed/fma_ambient_121474.mp3",
+      "true_genre": "Ambient",
+      "predicted_genre": "Classical",
+      "top_3_probs": [
+        {
+          "genre": "Classical",
+          "prob": 0.7722
+        },
+        {
+          "genre": "Ambient",
+          "prob": 0.1605
+        },
+        {
+          "genre": "Jazz",
+          "prob": 0.0293
+        }
+      ],
+      "artist_id": "fma_artist_20315",
+      "source_dataset": "FMA"
+    },
+    {
+      "track_id": "fma_ambient_121475",
+      "track_path": "datasets/processed/fma_ambient_121475.mp3",
+      "true_genre": "Ambient",
+      "predicted_genre": "Classical",
+      "top_3_probs": [
+        {
+          "genre": "Classical",
+          "prob": 0.7361
+        },
+        {
+          "genre": "Jazz",
+          "prob": 0.1867
+        },
+        {
+          "genre": "Ambient",
+          "prob": 0.0527
+        }
+      ],
+      "artist_id": "fma_artist_20315",
+      "source_dataset": "FMA"
+    },
+    {
+      "track_id": "fma_ambient_075430",
+      "track_path": "datasets/processed/fma_ambient_075430.mp3",
+      "true_genre": "Ambient",
+      "predicted_genre": "Blues",
+      "top_3_probs": [
+        {
+          "genre": "Hip-Hop",
+          "prob": 0.2489
+        },
+        {
+          "genre": "Blues",
+          "prob": 0.2251
+        },
+        {
+          "genre": "Ambient",
+          "prob": 0.1856
+        }
+      ],
+      "artist_id": "fma_artist_3951",
+      "source_dataset": "FMA"
+    },
+    {
+      "track_id": "fma_ambient_075431",
+      "track_path": "datasets/processed/fma_ambient_075431.mp3",
+      "true_genre": "Ambient",
+      "predicted_genre": "Country",
+      "top_3_probs": [
+        {
+          "genre": "Country",
+          "prob": 0.285
+        },
+        {
+          "genre": "Blues",
+          "prob": 0.2401
+        },
+        {
+          "genre": "Reggae",
+          "prob": 0.1391
+        }
+      ],
+      "artist_id": "fma_artist_3951",
+      "source_dataset": "FMA"
+    }
+  ]
+}

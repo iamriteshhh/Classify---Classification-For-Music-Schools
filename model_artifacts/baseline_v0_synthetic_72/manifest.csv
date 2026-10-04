@@ -1,0 +1,73 @@
+track_path,genre,subgenre,cultural_tag,artist_id,license,source
+datasets/processed/rock_artist_rock_01_t1.wav,Rock,Hard Rock,Global / Western,artist_rock_01,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/rock_artist_rock_01_t2.wav,Rock,Classic Rock,Global / Western,artist_rock_01,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/rock_artist_rock_01_t3.wav,Rock,Hard Rock,Global / Western,artist_rock_01,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/rock_artist_rock_02_t1.wav,Rock,Hard Rock,Global / Western,artist_rock_02,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/rock_artist_rock_02_t2.wav,Rock,Classic Rock,Global / Western,artist_rock_02,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/rock_artist_rock_02_t3.wav,Rock,Hard Rock,Global / Western,artist_rock_02,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/rock_artist_rock_03_t1.wav,Rock,Hard Rock,Global / Western,artist_rock_03,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/rock_artist_rock_03_t2.wav,Rock,Classic Rock,Global / Western,artist_rock_03,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/rock_artist_rock_03_t3.wav,Rock,Hard Rock,Global / Western,artist_rock_03,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/rock_artist_rock_04_t1.wav,Rock,Hard Rock,Global / Western,artist_rock_04,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/rock_artist_rock_04_t2.wav,Rock,Classic Rock,Global / Western,artist_rock_04,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/rock_artist_rock_04_t3.wav,Rock,Hard Rock,Global / Western,artist_rock_04,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/pop_artist_pop_01_t1.wav,Pop,Dance Pop,Global / Western,artist_pop_01,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/pop_artist_pop_01_t2.wav,Pop,Synth Pop,Global / Western,artist_pop_01,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/pop_artist_pop_01_t3.wav,Pop,Dance Pop,Global / Western,artist_pop_01,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/pop_artist_pop_02_t1.wav,Pop,Dance Pop,Global / Western,artist_pop_02,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/pop_artist_pop_02_t2.wav,Pop,Synth Pop,Global / Western,artist_pop_02,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/pop_artist_pop_02_t3.wav,Pop,Dance Pop,Global / Western,artist_pop_02,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/pop_artist_pop_03_t1.wav,Pop,Dance Pop,Global / Western,artist_pop_03,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/pop_artist_pop_03_t2.wav,Pop,Synth Pop,Global / Western,artist_pop_03,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/pop_artist_pop_03_t3.wav,Pop,Dance Pop,Global / Western,artist_pop_03,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/pop_artist_pop_04_t1.wav,Pop,Dance Pop,Global / Western,artist_pop_04,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/pop_artist_pop_04_t2.wav,Pop,Synth Pop,Global / Western,artist_pop_04,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/pop_artist_pop_04_t3.wav,Pop,Dance Pop,Global / Western,artist_pop_04,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/classical_artist_classical_01_t1.wav,Classical,Chamber,Global / Western,artist_classical_01,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/classical_artist_classical_01_t2.wav,Classical,Orchestral,Global / Western,artist_classical_01,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/classical_artist_classical_01_t3.wav,Classical,Chamber,Global / Western,artist_classical_01,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/classical_artist_classical_02_t1.wav,Classical,Chamber,Global / Western,artist_classical_02,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/classical_artist_classical_02_t2.wav,Classical,Orchestral,Global / Western,artist_classical_02,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/classical_artist_classical_02_t3.wav,Classical,Chamber,Global / Western,artist_classical_02,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/classical_artist_classical_03_t1.wav,Classical,Chamber,Global / Western,artist_classical_03,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/classical_artist_classical_03_t2.wav,Classical,Orchestral,Global / Western,artist_classical_03,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/classical_artist_classical_03_t3.wav,Classical,Chamber,Global / Western,artist_classical_03,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/classical_artist_classical_04_t1.wav,Classical,Chamber,Global / Western,artist_classical_04,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/classical_artist_classical_04_t2.wav,Classical,Orchestral,Global / Western,artist_classical_04,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/classical_artist_classical_04_t3.wav,Classical,Chamber,Global / Western,artist_classical_04,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/jazz_artist_jazz_01_t1.wav,Jazz,Cool Jazz,Global / Western,artist_jazz_01,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/jazz_artist_jazz_01_t2.wav,Jazz,Bebop,Global / Western,artist_jazz_01,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/jazz_artist_jazz_01_t3.wav,Jazz,Cool Jazz,Global / Western,artist_jazz_01,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/jazz_artist_jazz_02_t1.wav,Jazz,Cool Jazz,Global / Western,artist_jazz_02,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/jazz_artist_jazz_02_t2.wav,Jazz,Bebop,Global / Western,artist_jazz_02,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/jazz_artist_jazz_02_t3.wav,Jazz,Cool Jazz,Global / Western,artist_jazz_02,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/jazz_artist_jazz_03_t1.wav,Jazz,Cool Jazz,Global / Western,artist_jazz_03,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/jazz_artist_jazz_03_t2.wav,Jazz,Bebop,Global / Western,artist_jazz_03,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/jazz_artist_jazz_03_t3.wav,Jazz,Cool Jazz,Global / Western,artist_jazz_03,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/jazz_artist_jazz_04_t1.wav,Jazz,Cool Jazz,Global / Western,artist_jazz_04,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/jazz_artist_jazz_04_t2.wav,Jazz,Bebop,Global / Western,artist_jazz_04,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/jazz_artist_jazz_04_t3.wav,Jazz,Cool Jazz,Global / Western,artist_jazz_04,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/metal_artist_metal_01_t1.wav,Metal,Heavy Metal,Global / Western,artist_metal_01,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/metal_artist_metal_01_t2.wav,Metal,Thrash Metal,Global / Western,artist_metal_01,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/metal_artist_metal_01_t3.wav,Metal,Heavy Metal,Global / Western,artist_metal_01,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/metal_artist_metal_02_t1.wav,Metal,Heavy Metal,Global / Western,artist_metal_02,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/metal_artist_metal_02_t2.wav,Metal,Thrash Metal,Global / Western,artist_metal_02,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/metal_artist_metal_02_t3.wav,Metal,Heavy Metal,Global / Western,artist_metal_02,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/metal_artist_metal_03_t1.wav,Metal,Heavy Metal,Global / Western,artist_metal_03,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/metal_artist_metal_03_t2.wav,Metal,Thrash Metal,Global / Western,artist_metal_03,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/metal_artist_metal_03_t3.wav,Metal,Heavy Metal,Global / Western,artist_metal_03,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/metal_artist_metal_04_t1.wav,Metal,Heavy Metal,Global / Western,artist_metal_04,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/metal_artist_metal_04_t2.wav,Metal,Thrash Metal,Global / Western,artist_metal_04,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/metal_artist_metal_04_t3.wav,Metal,Heavy Metal,Global / Western,artist_metal_04,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/ambient_artist_ambient_01_t1.wav,Ambient,Chillout,Global / Western,artist_ambient_01,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/ambient_artist_ambient_01_t2.wav,Ambient,Drone,Global / Western,artist_ambient_01,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/ambient_artist_ambient_01_t3.wav,Ambient,Chillout,Global / Western,artist_ambient_01,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/ambient_artist_ambient_02_t1.wav,Ambient,Chillout,Global / Western,artist_ambient_02,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/ambient_artist_ambient_02_t2.wav,Ambient,Drone,Global / Western,artist_ambient_02,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/ambient_artist_ambient_02_t3.wav,Ambient,Chillout,Global / Western,artist_ambient_02,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/ambient_artist_ambient_03_t1.wav,Ambient,Chillout,Global / Western,artist_ambient_03,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/ambient_artist_ambient_03_t2.wav,Ambient,Drone,Global / Western,artist_ambient_03,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/ambient_artist_ambient_03_t3.wav,Ambient,Chillout,Global / Western,artist_ambient_03,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/ambient_artist_ambient_04_t1.wav,Ambient,Chillout,Global / Western,artist_ambient_04,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/ambient_artist_ambient_04_t2.wav,Ambient,Drone,Global / Western,artist_ambient_04,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine
+datasets/processed/ambient_artist_ambient_04_t3.wav,Ambient,Chillout,Global / Western,artist_ambient_04,CC-BY-4.0 (Educational Project Synthesized Audio),CLASSIFY-Audio-Engine

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set New Password — CLASSIFY</title>
+    {% include "partials/head.html" %}
+    <style>
+        .auth-container {
+            max-width: 440px;
+            margin: 40px auto;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 18px;
+        }
+        .form-label {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .form-input {
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            background: var(--bg-main);
+            border: 1px solid var(--border-strong);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-input:focus {
+            border-color: var(--border-focus);
+        }
+        .password-hint {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container auth-container">
+        <header class="app-header">
+            <div class="brand-badge">PASSWORD RECOVERY</div>
+            <h1 class="brand-title" style="font-size: 2.2rem;">New Password</h1>
+            <p class="brand-description">Choose a strong, unique password (minimum 10 characters).</p>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            <span class="alert-icon">{% if category == 'error' %}⚠️{% else %}ℹ️{% endif %}</span>
+                            <span class="alert-text">{{ message }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="card">
+            <form action="{{ url_for('auth.reset_token', token=token) }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <div class="form-group">
+                    <label class="form-label" for="password">New Password</label>
+                    <input type="password" name="password" id="password" required minlength="10" class="form-input" placeholder="••••••••••••">
+                    <span class="password-hint">Must be at least 10 characters and not found in common data breaches.</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="confirm_password">Confirm New Password</label>
+                    <input type="password" name="confirm_password" id="confirm_password" required minlength="10" class="form-input" placeholder="••••••••••••">
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                    <span>Update Password</span>
+                    <span>→</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

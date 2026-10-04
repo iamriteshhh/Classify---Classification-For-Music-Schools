@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLASSIFY — Music Classification System for Music Schools</title>
+    {% include "partials/head.html" %}
+</head>
+<body class="has-app-shell">
+
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <div class="app-shell">
+        <!-- ============================================================== -->
+        <!-- SIDEBAR: STUDENT PANEL & GENRE LIBRARY                         -->
+        <!-- ============================================================== -->
+        <aside class="app-sidebar" id="appSidebar">
+            <!-- 4.1 Pinned Student / User Panel -->
+            <div class="sidebar-user-panel">
+                {% if current_user.is_authenticated %}
+                    {% if current_user.is_student() %}
+                        <a href="{{ url_for('student.dashboard') }}" class="user-card-link" title="Open Student Dashboard">
+                            <div class="user-avatar">{{ current_user.initials }}</div>
+                            <div class="user-info">
+                                <span class="user-name">{{ current_user.display_name }}</span>
+                                <span class="user-stats-line">
+                                    {% if sidebar_user_stats and sidebar_user_stats.total_songs > 0 %}
+                                        {{ sidebar_user_stats.total_songs }} track{% if sidebar_user_stats.total_songs != 1 %}s{% endif %} &bull; {{ sidebar_user_stats.most_analyzed_genre }}
+                                    {% else %}
+                                        Student Dashboard &bull; 0 tracks
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <span class="user-chevron">›</span>
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('teacher.dashboard') }}" class="user-card-link" title="Open Teacher Dashboard">
+                            <div class="user-avatar" style="background: var(--bg-card-hover); border: 1px solid var(--border-strong);">{{ current_user.initials }}</div>
+                            <div class="user-info">
+                                <span class="user-name">{{ current_user.display_name }}</span>
+                                <span class="user-stats-line">Music Instructor &bull; Reviews</span>
+                            </div>
+                            <span class="user-chevron">›</span>
+                        </a>
+                    {% endif %}
+                {% else %}
+                    <a href="{{ url_for('auth.login') }}" class="user-card-link" title="Sign in to your account">
+                        <div class="user-avatar guest-avatar">👤</div>
+                        <div class="user-info">
+                            <span class="user-name">Guest Student</span>
+                            <span class="user-stats-line">Sign in to save track history</span>
+                        </div>
+                        <span class="user-chevron">›</span>
+                    </a>
+                {% endif %}
+            </div>
+
+            <!-- 4.2 Genre Library Accordion Explorer -->
+            <div class="sidebar-genre-section">
+                <div class="genre-section-header">
+                    <span class="genre-section-title">Genre Library</span>
+                    <span class="genre-count-badge">{{ sidebar_genres|length if sidebar_genres else 11 }} Genres</span>
+                </div>
+
+                <div class="genre-search-box">
+                    <input type="text" id="genreSearchInput" class="genre-search-input" placeholder="Search genres or acoustic traits..." autocomplete="off">
+                </div>
+
+                <div class="sidebar-genre-list" id="genreList">
+                    {% for genre in sidebar_genres %}
+                    <div class="sidebar-genre-item" data-genre-name="{{ genre.name|lower }}" data-genre-desc="{{ genre.description|lower }}">
+                        <button type="button" class="genre-btn" aria-expanded="false" onclick="toggleGenreAccordion(this)">
+                            <div class="genre-btn-left">
+                                <span class="genre-dot"></span>
+                                <span>{{ genre.name }}</span>
+                                {% if genre.subgenres %}
+                                <span class="genre-sub-pill">{{ genre.subgenres|length }} sub</span>
+                                {% endif %}
+                            </div>
+                            <span class="genre-chevron">›</span>
+                        </button>
+                        <div class="genre-panel">
+                            <!-- Why it's called that / what defines it -->
+                            <div class="panel-block">
+                                <span class="panel-label">Why It's Called {{ genre.name }}</span>
+                                <p class="panel-text">{{ genre.description }}</p>
+                            </div>
+
+                            {% if genre.history %}
+                            <div class="panel-block">
+                                <span class="panel-label">Historical Origins</span>
+                                <p class="panel-text">{{ genre.history }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if genre.typical_structures %}
+                            <div class="panel-block">
+                                <span class="panel-label">Typical Structure</span>
+                                <p class="panel-text">{{ genre.typical_structures }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if genre.common_instrumentation %}
+                            <div class="panel-block">
+                                <span class="panel-label">Instrumentation</span>
+                                <div class="panel-tags">
+                                    {% for inst in genre.common_instrumentation.split(',') %}
+                                        <span class="panel-tag">{{ inst.strip() }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            {% if genre.subgenres %}
+                            <div class="panel-block">
+                                <span class="panel-label">Subgenres</span>
+                                <div class="panel-tags">
+                                    {% for sub in genre.subgenres %}
+                                        <span class="panel-tag" title="{{ sub.description }}">{{ sub.name }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <a href="{{ url_for('library.detail', genre_slug=genre.slug) }}" class="genre-detail-link">
+                                Complete {{ genre.name }} Guide &rarr;
+                            </a>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div style="padding: 20px 10px; text-align: center; color: var(--text-muted); font-size: 0.8rem;">
+                        Genre Library loaded from taxonomy
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Compare Two Genres Link at Sidebar Bottom -->
+            <div class="sidebar-footer">
+                <a href="{{ url_for('explore.index') }}" class="compare-link">
+                    <span>⇄ Compare Two Genres</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- ============================================================== -->
+        <!-- MAIN PANEL                                                     -->
+        <!-- ============================================================== -->
+        <main class="app-main">
+            <!-- Top Bar -->
+            <header class="main-topbar">
+                <div class="topbar-left">
+                    <button type="button" class="sidebar-toggle-btn" id="btnSidebarToggle" aria-label="Toggle Genre Library Sidebar">
+                        ☰
+                    </button>
+                    <a href="{{ url_for('analysis.index') }}" class="topbar-brand">
+                        <span>CLASSIFY</span>
+                        <span class="brand-badge" style="margin: 0; font-size: 0.68rem; padding: 2px 8px;">STUDIO</span>
+                    </a>
+                </div>
+
+                <nav class="topbar-links">
+                    <a href="{{ url_for('library.index') }}" class="topbar-link">Genre Library</a>
+                    <a href="{{ url_for('explore.index') }}" class="topbar-link">Explore</a>
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.is_teacher() %}
+                            <a href="{{ url_for('teacher.dashboard') }}" class="topbar-link">Teacher Dashboard</a>
+                        {% else %}
+                            <a href="{{ url_for('student.dashboard') }}" class="topbar-link">My Dashboard</a>
+                        {% endif %}
+                        <a href="{{ url_for('student.notifications') }}" class="topbar-link" title="Notifications" style="position: relative; display: inline-flex; align-items: center; gap: 4px;">
+                            <span>🔔</span>
+                            {% if unread_notifications_count and unread_notifications_count > 0 %}
+                                <span style="font-size: 0.68rem; padding: 1px 6px; border-radius: 10px; background: #e03131; color: white; font-weight: 700;">{{ unread_notifications_count }}</span>
+                            {% endif %}
+                        </a>
+                    {% endif %}
+                </nav>
+
+                <div class="topbar-auth">
+                    {% if current_user.is_authenticated %}
+                        <span class="topbar-user-email">{{ current_user.email }}</span>
+                        <a href="{{ url_for('auth.logout') }}" class="btn-signout">Sign Out</a>
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="btn-signin">Sign In</a>
+                        <a href="{{ url_for('auth.register') }}" class="btn-signup">Sign Up</a>
+                    {% endif %}
+                </div>
+            </header>
+
+            <!-- Scrollable Content Canvas -->
+            <div class="main-scroll-content">
+                <div class="main-canvas">
+                    <!-- Semantic Header (for accessibility & test assertions) -->
+                    <div style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">
+                        <h1>CLASSIFY</h1>
+                        <p>Music Classification System for Music Schools</p>
+                        <p>Upload Music File</p>
+                    </div>
+
+                    <!-- Flash Alerts -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            <div class="flash-messages">
+                                {% for category, message in messages %}
+                                    <div class="alert alert-{{ category }}">
+                                        <span class="alert-icon">{% if category == 'error' %}⚠️{% else %}ℹ️{% endif %}</span>
+                                        <span class="alert-text">{{ message }}</span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+
+                    <!-- Dynamic Notification Area for AJAX errors -->
+                    <div id="dynamicAlert" class="flash-messages" style="display: none;"></div>
+
+                    <!-- ============================================================== -->
+                    <!-- EMPTY STATE: TIME-OF-DAY GREETING & COMPOSER DROP-ZONE         -->
+                    <!-- ============================================================== -->
+                    {% if not result %}
+                    <section class="empty-state" id="emptyStateSection">
+                        <h2 class="greeting-title" id="greetingGreeting">
+                            Good evening, {{ current_user.display_name if current_user.is_authenticated else 'Student' }}
+                        </h2>
+                        <p class="greeting-prompt">Let's analyze your next track.</p>
+                        <p class="greeting-subhead">
+                            Upload a track and CLASSIFY will identify its musical genre and extract acoustic properties using trained classical machine learning.
+                        </p>
+
+                        <!-- Composer / Drop-zone Card -->
+                        <div class="composer-card">
+                            <form action="{{ url_for('analyze') }}" method="POST" enctype="multipart/form-data" id="uploadForm" class="upload-form">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+                                <div class="composer-dropzone" id="dropZone">
+                                    <div class="composer-icon" id="dropIcon">🎵</div>
+                                    <div class="drop-text" id="dropText">
+                                        <span class="composer-prompt">Click to browse or drag & drop audio here</span>
+                                        <span class="composer-subtext">Supported formats: WAV, MP3 (Max 20MB)</span>
+                                    </div>
+                                    <input type="file" name="audio_file" id="audioFile" accept=".wav,.mp3" required class="file-input">
+
+                                    <div class="file-preview" id="filePreview" style="display: none;">
+                                        <span class="file-name" id="selectedFileName">No file selected</span>
+                                        <button type="button" class="btn-clear" id="btnClearFile">Change</button>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary" id="btnSubmit">
+                                    <span class="btn-text">Analyze Music</span>
+                                    <span class="btn-icon">⚡</span>
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Shortcut / Suggestion Chips -->
+                        <div class="suggestion-chips">
+                            <button type="button" class="suggestion-chip" onclick="focusGenreSearch()">📚 Browse Genre Library</button>
+                            <a href="{{ url_for('explore.index') }}" class="suggestion-chip">⚖️ Compare two genres</a>
+                            {% if current_user.is_authenticated and current_user.is_student() %}
+                                <a href="{{ url_for('student.dashboard') }}" class="suggestion-chip">📊 View Practice History</a>
+                            {% else %}
+                                <a href="{{ url_for('library.index') }}" class="suggestion-chip">🔬 Explore Acoustic Features</a>
+                            {% endif %}
+                        </div>
+                    </section>
+                    {% endif %}
+
+                    <!-- ============================================================== -->
+                    <!-- CONVERSATIONAL ANALYSIS THREAD (EXCHANGE CONTAINER)            -->
+                    <!-- ============================================================== -->
+                    <section class="analysis-thread" id="analysisThread" style="{% if not result %}display: none;{% endif %}">
+                        {% if result %}
+                            <!-- User Turn (Uploaded Audio Chip & Player) -->
+                            <div class="chat-turn-user stagger-item">
+                                <div class="user-bubble">
+                                    <div class="user-file-chip">
+                                        <span class="user-file-icon">🎵</span>
+                                        <div class="user-file-details">
+                                            <span class="user-file-name">{{ result.features.file_name }}</span>
+                                            <span class="user-file-subtext">{{ result.features.duration }} seconds &bull; {{ result.features.sample_rate }} Hz</span>
+                                        </div>
+                                    </div>
+                                    {% if audio_url %}
+                                    <div class="audio-player-box" style="margin: 0; padding: 12px 16px; background: rgba(0,0,0,0.25); border-radius: 8px;">
+                                        <div id="mainWaveform" class="wavesurfer-container" data-url="{{ audio_url }}" style="margin-bottom: 8px; border-radius: 6px; overflow: hidden; height: 60px;"></div>
+                                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+                                            <div style="display: flex; align-items: center; gap: 8px;">
+                                                <button type="button" class="btn-play-pause" id="btnMainWavePlay" aria-label="Play or pause audio playback (Shortcut: Space)" title="Play/Pause (Space, J: -5s, L: +5s)" style="background: var(--accent, #38bdf8); border: none; border-radius: 50%; width: 32px; height: 32px; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 13px;">▶</button>
+                                                <span id="mainWaveTime" class="mono" style="font-size: 0.78rem; color: var(--text-muted);" aria-live="off">0:00 / 0:00</span>
+                                            </div>
+                                            <span style="font-size: 0.74rem; color: var(--text-muted);">Waveform (Space: Play/Pause &bull; J/L: &plusmn;5s)</span>
+                                            <audio controls src="{{ audio_url }}" id="fallbackMainAudio" class="custom-audio-player" style="display: none;"></audio>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Assistant Turn (Progressive Report Reply) -->
+                            <div class="chat-turn-assistant stagger-item">
+                                <div class="assistant-header">
+                                    <div class="assistant-avatar">CL</div>
+                                    <span class="assistant-name">CLASSIFY</span>
+                                    <span class="assistant-tag">Acoustic Analysis</span>
+                                </div>
+
+                                <div class="assistant-bubble">
+                                    <!-- Assistant Header Badge (preserves test assertion) -->
+                                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 12px;">
+                                        <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.05em;">
+                                            Audio Analysis &amp; Prototype Classification
+                                        </span>
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            {% if result.analysis_id %}
+                                            <a href="{{ url_for('analysis.export_pdf', analysis_id=result.analysis_id) }}" class="btn-export-pdf" style="padding: 4px 10px; background: rgba(37, 99, 235, 0.15); border: 1px solid rgba(37, 99, 235, 0.3); border-radius: 6px; color: #38bdf8; text-decoration: none; font-size: 0.78rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+                                                📄 Download PDF Report
+                                            </a>
+                                            {% endif %}
+                                            <span style="font-size: 0.78rem; color: var(--text-muted);">
+                                                {{ result.classification.model_name }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- 1. Predicted Genre & Confidence Banner -->
+                                    <div class="genre-prediction-card" style="margin: 0;">
+                                        <div class="prediction-header">
+                                            <div>
+                                                <span class="prediction-label">PROTOTYPE PREDICTION:</span>
+                                                <span class="prediction-genre">{{ result.classification.predicted_genre }}</span>
+                                                {% if result.classification.subgenre %}
+                                                <span class="subgenre-badge" style="display: inline-block; margin-left: 8px; padding: 3px 10px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 9999px; font-size: 0.82rem; font-weight: 600;">
+                                                    ↳ {{ result.classification.subgenre.name }}
+                                                </span>
+                                                {% endif %}
+                                            </div>
+                                            <div class="badge-group">
+                                                <span class="confidence-badge" title="Model confidence probability">{{ result.classification.confidence_percent }}% Confidence</span>
+                                                <span class="model-badge">{{ result.classification.model_name }}</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Multi-Label Genre Badges (Task 1.4) -->
+                                        {% if result.classification.genre_tags and result.classification.genre_tags|length > 1 %}
+                                        <div class="genre-tags-container" style="margin-top: 10px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                            <span style="font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600; letter-spacing: 0.05em;">Acoustic Influences:</span>
+                                            {% for tag in result.classification.genre_tags %}
+                                            <span class="genre-tag-pill" style="font-size: 0.78rem; padding: 3px 10px; border-radius: 9999px; {% if tag.is_primary %}background: var(--brand-primary, #6366f1); color: #fff; font-weight: 600;{% else %}background: var(--bg-card-subtle); color: var(--text-secondary); border: 1px solid var(--border-subtle);{% endif %}">
+                                                {{ tag.genre }} ({{ tag.percent }}%)
+                                            </span>
+                                            {% endfor %}
+                                        </div>
+                                        {% endif %}
+
+                                        <!-- 2. Low-Confidence Notice -->
+                                        {% if result.classification.is_low_confidence %}
+                                        <div class="low-confidence-notice" style="margin-top: 12px; padding: 10px 14px; background: var(--bg-card-subtle); border-left: 3px solid var(--status-warning); border-radius: 6px; color: var(--text-primary); font-size: 0.88rem;">
+                                            <span><strong>Notice:</strong> The acoustic profile contains overlapping characteristics with secondary candidate genres.</span>
+                                        </div>
+                                        {% endif %}
+
+                                        <!-- 3. Plain-Language Explanation (Why This Classification) -->
+                                        <div class="explanation-callout" style="margin-top: 14px;">
+                                            <strong>Why This Classification:</strong> {{ result.classification.explanation }}
+                                        </div>
+
+                                        <!-- 4. Primary Acoustic Drivers -->
+                                        {% if result.classification.explanation_factors %}
+                                        <div class="explanation-factors" style="margin-top: 12px; font-size: 0.88rem; color: var(--text-secondary);">
+                                            <span style="font-weight: 600; color: var(--text-primary);">Primary Acoustic Drivers:</span>
+                                            <ul style="margin-left: 20px; margin-top: 6px; list-style-type: disc;">
+                                                {% for factor in result.classification.explanation_factors %}
+                                                <li>{{ factor.description }} (measured value: {{ factor.measured_value }})</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                        {% endif %}
+
+                                        <!-- 5. Alternative Genre Probability Distribution -->
+                                        {% if result.classification.alternatives %}
+                                        <div class="alternatives-box" style="margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-subtle);">
+                                            <span style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">Alternative Genre Probabilities:</span>
+                                            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+                                                {% for alt in result.classification.alternatives %}
+                                                <div>
+                                                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 3px;">
+                                                        <span style="font-weight: 600;">{{ alt.genre }}</span>
+                                                        <span class="mono" style="color: var(--text-primary);">{{ alt.percent }}%</span>
+                                                    </div>
+                                                    <div style="background: rgba(255,255,255,0.08); height: 6px; border-radius: 4px; overflow: hidden;">
+                                                        <div style="background: var(--accent); height: 100%; width: {{ alt.percent }}%;"></div>
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        {% endif %}
+
+                                        <!-- 6. Instructor Pedagogical Review (if reviewed) -->
+                                        {% if result.teacher_review %}
+                                        <div style="margin-top: 18px; padding: 16px; background: var(--bg-card-subtle); border-left: 3px solid var(--border-strong); border-radius: 6px;">
+                                            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px;">
+                                                <strong style="color: var(--text-primary); font-size: 0.95rem;">Instructor Pedagogical Review</strong>
+                                                <span style="font-size: 0.8rem; color: var(--text-muted);">
+                                                    {% if result.teacher_review.agrees_with_model %}
+                                                        <span style="color: var(--text-primary); font-weight: 600;">Agreed with Model</span>
+                                                    {% else %}
+                                                        <span style="color: var(--text-secondary); font-weight: 600;">Verified as {{ result.teacher_review.teacher_genre }}</span>
+                                                    {% endif %}
+                                                </span>
+                                            </div>
+                                            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">
+                                                {{ result.teacher_review.comment or 'No additional written comments provided.' }}
+                                            </p>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- 7. Collapsible Extracted Acoustic Properties (Tier 1 Measurements) -->
+                                    <div class="technical-details-toggle">
+                                        <button type="button" class="btn-toggle-tech" id="btnToggleTech" onclick="toggleTechDetails(this)">
+                                            <span>▶ Show technical acoustic properties</span>
+                                        </button>
+
+                                        <div class="technical-properties-content is-open" id="techDetailsPanel">
+                                            <h3 class="section-title" style="margin-bottom: 12px; font-size: 0.95rem;">Extracted Acoustic Properties (Tier 1 Measurements)</h3>
+                                            <div class="features-grid">
+                                                <div class="feature-item">
+                                                    <span class="feature-label">File Name</span>
+                                                    <span class="feature-value code-font" title="{{ result.features.file_name }}">{{ result.features.file_name }}</span>
+                                                </div>
+                                                <div class="feature-item">
+                                                    <span class="feature-label">Duration</span>
+                                                    <span class="feature-value">{{ result.features.duration }} seconds</span>
+                                                </div>
+                                                <div class="feature-item">
+                                                    <span class="feature-label">Sample Rate</span>
+                                                    <span class="feature-value">{{ result.features.sample_rate }} Hz</span>
+                                                </div>
+                                                <div class="feature-item">
+                                                    <span class="feature-label">Detected Key &amp; Mode</span>
+                                                    <span class="feature-value highlight" style="color: #38bdf8; font-weight: 700;">{% if result.features.detected_key and result.features.detected_key != 'Unknown' %}🎵 {{ result.features.detected_key }}{% else %}—{% endif %}</span>
+                                                </div>
+                                                <div class="feature-item">
+                                                    <span class="feature-label">Time Signature &amp; Meter</span>
+                                                    <span class="feature-value highlight" style="color: #a78bfa; font-weight: 700;">⏱ {{ result.features.time_signature or '4/4' }} <small style="color:var(--text-muted); font-size:0.75rem;">({{ result.features.meter_type or 'Common' }})</small></span>
+                                                </div>
+                                                <div class="feature-item">
+                                                    <span class="feature-label">Vocal vs. Instrumental</span>
+                                                    <span class="feature-value highlight" style="color: {% if result.features.vocal_presence == 'Vocal' %}#34d399{% else %}#94a3b8{% endif %}; font-weight: 700;">🎙 {{ result.features.vocal_presence or 'Instrumental' }}</span>
+                                                </div>
+                                                <div class="feature-item" style="grid-column: 1 / -1;">
+                                                    <span class="feature-label">Detected Chord Progression</span>
+                                                    <span class="feature-value highlight code-font" style="color: #fbbf24; font-weight: 700;">🎼 {{ result.features.progression_str or (result.features.chord_progression|join(' → ') if result.features.chord_progression else 'None detected') }}</span>
+                                                </div>
+                                                <div class="feature-item">
+                                                    <span class="feature-label">Tempo</span>
+                                                    <span class="feature-value highlight">{{ result.features.tempo }} BPM</span>
+                                                </div>
+                                                <div class="feature-item">
+                                                    <span class="feature-label">RMS Energy (Mean &amp; Var)</span>
+                                                    <span class="feature-value">{{ result.features.rms_mean }} <small style="color:var(--text-muted);">(&plusmn;{{ result.features.rms_var }})</small></span>
+                                                </div>
+                                                <div class="feature-item">
+                                                    <span class="feature-label">Zero Crossing Rate</span>
+                                                    <span class="feature-value">{{ result.features.zcr_mean }} <small style="color:var(--text-muted);">(&plusmn;{{ result.features.zcr_var }})</small></span>
+                                                </div>
+                                                <div class="feature-item">
+                                                    <span class="feature-label">Spectral Centroid</span>
+                                                    <span class="feature-value">{{ result.features.spectral_centroid }} Hz</span>
+                                                </div>
+                                                <div class="feature-item">
+                                                    <span class="feature-label">Spectral Bandwidth</span>
+                                                    <span class="feature-value">{{ result.features.spectral_bandwidth_mean }} Hz</span>
+                                                </div>
+                                                <div class="feature-item">
+                                                    <span class="feature-label">Spectral Rolloff</span>
+                                                    <span class="feature-value">{{ result.features.spectral_rolloff_mean }} Hz</span>
+                                                </div>
+                                                <div class="feature-item">
+                                                    <span class="feature-label">Spectral Contrast</span>
+                                                    <span class="feature-value">{{ result.features.spectral_contrast_mean }} dB</span>
+                                                </div>
+                                                <div class="feature-item">
+                                                    <span class="feature-label">MFCC Timbre Mean</span>
+                                                    <span class="feature-value">{{ result.features.mfcc_mean }}</span>
+                                                </div>
+                                                <div class="feature-item">
+                                                    <span class="feature-label">Onset Rate</span>
+                                                    <span class="feature-value highlight">{{ result.features.onset_rate }} onsets/sec</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Follow-up Composer below thread for subsequent tracks -->
+                            <div class="subsequent-composer">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                    <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-primary);">Analyze another track</span>
+                                    <a href="{{ url_for('analysis.index') }}" style="font-size: 0.78rem; color: var(--text-secondary); text-decoration: underline;">Reset thread</a>
+                                </div>
+                                <div class="composer-card" style="padding: 16px;">
+                                    <form action="{{ url_for('analyze') }}" method="POST" enctype="multipart/form-data" class="upload-form subsequent-form">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                        <div class="composer-dropzone" style="padding: 20px 16px;">
+                                            <div class="composer-icon" style="font-size: 1.8rem; margin-bottom: 4px;">🎵</div>
+                                            <span class="composer-prompt" style="font-size: 0.9rem;">Drop another audio file or click to browse</span>
+                                            <input type="file" name="audio_file" accept=".wav,.mp3" required class="file-input" onchange="this.form.submit()">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- CLIENT INTERACTION SCRIPT                                      -->
+    <!-- ============================================================== -->
+    <script>
+        // 1. Time-of-day greeting
+        (function initGreeting() {
+            const greetingEl = document.getElementById('greetingGreeting');
+            if (!greetingEl) return;
+            const hour = new Date().getHours();
+            let timeOfDay = "evening";
+            if (hour < 12) {
+                timeOfDay = "morning";
+            } else if (hour < 17) {
+                timeOfDay = "afternoon";
+            }
+            const userName = "{{ current_user.display_name if current_user.is_authenticated else 'Student' }}";
+            greetingEl.textContent = `Good ${timeOfDay}, ${userName}`;
+        })();
+
+        // 2. Mobile Sidebar Drawer Toggle
+        const btnSidebarToggle = document.getElementById('btnSidebarToggle');
+        const appSidebar = document.getElementById('appSidebar');
+        const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+
+        function toggleSidebar() {
+            if (appSidebar) appSidebar.classList.toggle('is-open');
+            if (sidebarBackdrop) sidebarBackdrop.classList.toggle('is-open');
+        }
+
+        if (btnSidebarToggle) {
+            btnSidebarToggle.addEventListener('click', toggleSidebar);
+        }
+        if (sidebarBackdrop) {
+            sidebarBackdrop.addEventListener('click', toggleSidebar);
+        }
+
+        // 3. Genre Accordion Expand/Collapse
+        function toggleGenreAccordion(btn) {
+            const item = btn.closest('.sidebar-genre-item');
+            if (!item) return;
+            const isExpanded = item.classList.contains('is-expanded');
+            
+            // Close other items for single-accordion focus
+            document.querySelectorAll('.sidebar-genre-item.is-expanded').forEach(el => {
+                if (el !== item) {
+                    el.classList.remove('is-expanded');
+                    const b = el.querySelector('.genre-btn');
+                    if (b) b.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            item.classList.toggle('is-expanded', !isExpanded);
+            btn.setAttribute('aria-expanded', !isExpanded ? 'true' : 'false');
+        }
+
+        // 4. Genre Search / Filter in Sidebar
+        const genreSearchInput = document.getElementById('genreSearchInput');
+        if (genreSearchInput) {
+            genreSearchInput.addEventListener('input', function() {
+                const query = this.value.trim().toLowerCase();
+                const items = document.querySelectorAll('.sidebar-genre-item');
+                items.forEach(item => {
+                    const name = item.getAttribute('data-genre-name') || '';
+                    const desc = item.getAttribute('data-genre-desc') || '';
+                    if (name.includes(query) || desc.includes(query)) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        function focusGenreSearch() {
+            if (appSidebar && !appSidebar.classList.contains('is-open') && window.innerWidth <= 860) {
+                toggleSidebar();
+            }
+            if (genreSearchInput) {
+                genreSearchInput.focus();
+            }
+        }
+
+        // 5. File Upload Dropzone UI handling
+        const audioInput = document.getElementById('audioFile');
+        const dropZone = document.getElementById('dropZone');
+        const dropPrompt = document.querySelector('.composer-prompt');
+        const dropSubtext = document.querySelector('.composer-subtext');
+        const dropIcon = document.getElementById('dropIcon');
+        const filePreview = document.getElementById('filePreview');
+        const selectedFileName = document.getElementById('selectedFileName');
+        const btnClear = document.getElementById('btnClearFile');
+        const uploadForm = document.getElementById('uploadForm');
+        const btnSubmit = document.getElementById('btnSubmit');
+
+        if (audioInput) {
+            audioInput.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const file = this.files[0];
+                    selectedFileName.textContent = file.name + ' (' + (file.size / (1024*1024)).toFixed(2) + ' MB)';
+                    if (dropPrompt) dropPrompt.style.display = 'none';
+                    if (dropSubtext) dropSubtext.style.display = 'none';
+                    if (dropIcon) dropIcon.style.display = 'none';
+                    if (filePreview) filePreview.style.display = 'flex';
+                }
+            });
+
+            if (btnClear) {
+                btnClear.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    audioInput.value = '';
+                    if (filePreview) filePreview.style.display = 'none';
+                    if (dropPrompt) dropPrompt.style.display = 'block';
+                    if (dropSubtext) dropSubtext.style.display = 'block';
+                    if (dropIcon) dropIcon.style.display = 'block';
+                });
+            }
+        }
+
+        // Drag and drop feedback
+        if (dropZone) {
+            ['dragenter', 'dragover'].forEach(name => {
+                dropZone.addEventListener(name, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropZone.classList.add('is-dragover');
+                });
+            });
+            ['dragleave', 'drop'].forEach(name => {
+                dropZone.addEventListener(name, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropZone.classList.remove('is-dragover');
+                });
+            });
+        }
+
+        // 6. Progressive Technical Properties Toggle
+        function toggleTechDetails(btn) {
+            const panel = btn.parentElement.querySelector('.technical-properties-content');
+            if (!panel) return;
+            const isOpen = panel.classList.contains('is-open');
+            panel.classList.toggle('is-open', !isOpen);
+            btn.innerHTML = isOpen 
+                ? '<span>▶ Show technical acoustic properties</span>' 
+                : '<span>▼ Hide technical acoustic properties</span>';
+        }
+
+        // 7. Progressive AJAX Form Submission & Streamed Reply Simulation
+        if (uploadForm) {
+            uploadForm.addEventListener('submit', async function(e) {
+                // If no file selected, allow default HTML5 validation
+                if (!audioInput || !audioInput.files || !audioInput.files[0]) {
+                    return;
+                }
+
+                e.preventDefault();
+
+                const file = audioInput.files[0];
+                const thread = document.getElementById('analysisThread');
+                const emptyState = document.getElementById('emptyStateSection');
+                const alertBox = document.getElementById('dynamicAlert');
+                if (alertBox) { alertBox.style.display = 'none'; alertBox.innerHTML = ''; }
+
+                // Hide empty state, reveal thread
+                if (emptyState) emptyState.style.display = 'none';
+                if (thread) thread.style.display = 'flex';
+
+                // Create User Turn bubble immediately
+                const userTurn = document.createElement('div');
+                userTurn.className = 'chat-turn-user stagger-item';
+                const fileSizeMb = (file.size / (1024 * 1024)).toFixed(2);
+                userTurn.innerHTML = `
+                    <div class="user-bubble">
+                        <div class="user-file-chip">
+                            <span class="user-file-icon">🎵</span>
+                            <div class="user-file-details">
+                                <span class="user-file-name">${escapeHtml(file.name)}</span>
+                                <span class="user-file-subtext">${fileSizeMb} MB &bull; Uploaded for ML analysis</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                thread.appendChild(userTurn);
+
+                // Create Assistant Turn with Live Analyzing Waveform Indicator
+                const assistantTurn = document.createElement('div');
+                assistantTurn.className = 'chat-turn-assistant stagger-item';
+                assistantTurn.innerHTML = `
+                    <div class="assistant-header">
+                        <div class="assistant-avatar">CL</div>
+                        <span class="assistant-name">CLASSIFY</span>
+                        <span class="assistant-tag">Acoustic Analysis</span>
+                    </div>
+                    <div class="analyzing-indicator" id="currentAnalyzingState">
+                        <div class="waveform-dots">
+                            <div class="waveform-dot"></div>
+                            <div class="waveform-dot"></div>
+                            <div class="waveform-dot"></div>
+                        </div>
+                        <span>Extracting Tier-1 acoustic properties and classifying genre...</span>
+                    </div>
+                `;
+                thread.appendChild(assistantTurn);
+                assistantTurn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+                // Submit via AJAX with Async Worker Execution (Phase 2 Task 2.1)
+                const formData = new FormData(uploadForm);
+                formData.append('async', '1');
+
+                try {
+                    const response = await fetch("{{ url_for('analyze') }}", {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-Async-Processing': '1'
+                        }
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok || !data.success) {
+                        throw new Error(data.error || 'Audio analysis failed.');
+                    }
+
+                    let result = data.result;
+                    let audioUrl = data.audio_url;
+
+                    // If dispatched to async task queue, stream SSE / poll progress
+                    if (data.async && data.task_id) {
+                        result = await new Promise((resolve, reject) => {
+                            const ind = assistantTurn.querySelector('#currentAnalyzingState');
+                            function updateProgress(stepMsg, percent) {
+                                if (!ind) return;
+                                const pct = percent || 10;
+                                ind.innerHTML = `
+                                    <div style="width: 100%;">
+                                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                                            <div style="display: flex; align-items: center; gap: 8px;">
+                                                <div class="waveform-dots"><div class="waveform-dot"></div><div class="waveform-dot"></div><div class="waveform-dot"></div></div>
+                                                <span style="font-size: 0.88rem; font-weight: 500;">${escapeHtml(stepMsg)}</span>
+                                            </div>
+                                            <span class="mono" style="font-weight: 700; color: var(--accent); font-size: 0.85rem;">${pct}%</span>
+                                        </div>
+                                        <div style="background: rgba(255,255,255,0.08); height: 6px; border-radius: 4px; overflow: hidden;">
+                                            <div style="background: var(--accent); height: 100%; width: ${pct}%; transition: width 0.3s ease;"></div>
+                                        </div>
+                                    </div>
+                                `;
+                            }
+
+                            let resolved = false;
+                            let eventSource = null;
+
+                            function startPolling() {
+                                const pollInterval = setInterval(async () => {
+                                    if (resolved) {
+                                        clearInterval(pollInterval);
+                                        return;
+                                    }
+                                    try {
+                                        const res = await fetch(data.status_url);
+                                        const pollData = await res.json();
+                                        if (pollData.success && pollData.task) {
+                                            const t = pollData.task;
+                                            updateProgress(t.step || "Processing...", t.progress);
+                                            if (t.status === "completed") {
+                                                resolved = true;
+                                                clearInterval(pollInterval);
+                                                if (t.result && t.result.audio_url) audioUrl = t.result.audio_url;
+                                                resolve(t.result);
+                                            } else if (t.status === "failed") {
+                                                resolved = true;
+                                                clearInterval(pollInterval);
+                                                reject(new Error(t.error || "Audio analysis failed."));
+                                            }
+                                        }
+                                    } catch (err) {
+                                        // retry next cycle
+                                    }
+                                }, 600);
+                            }
+
+                            if (window.EventSource && data.events_url) {
+                                try {
+                                    eventSource = new EventSource(data.events_url);
+                                    eventSource.onmessage = function(e) {
+                                        if (resolved) return;
+                                        try {
+                                            const statusObj = JSON.parse(e.data);
+                                            updateProgress(statusObj.step || "Processing audio...", statusObj.progress);
+                                            if (statusObj.status === "completed") {
+                                                resolved = true;
+                                                eventSource.close();
+                                                if (statusObj.result && statusObj.result.audio_url) audioUrl = statusObj.result.audio_url;
+                                                resolve(statusObj.result);
+                                            } else if (statusObj.status === "failed") {
+                                                resolved = true;
+                                                eventSource.close();
+                                                reject(new Error(statusObj.error || "Analysis failed"));
+                                            }
+                                        } catch(pe) {}
+                                    };
+                                    eventSource.onerror = function() {
+                                        if (!resolved) {
+                                            if (eventSource) eventSource.close();
+                                            startPolling();
+                                        }
+                                    };
+                                } catch(e) {
+                                    startPolling();
+                                }
+                            } else {
+                                startPolling();
+                            }
+                        });
+                    }
+
+                    // Update User Turn bubble with Audio Player if available
+                    if (audioUrl) {
+                        const playerBox = document.createElement('div');
+                        playerBox.className = 'audio-player-box';
+                        playerBox.style.margin = '0';
+                        playerBox.style.padding = '10px 14px';
+                        playerBox.innerHTML = `<audio controls src="${audioUrl}" class="custom-audio-player"></audio>`;
+                        userTurn.querySelector('.user-bubble').appendChild(playerBox);
+                    }
+
+                    // Replace analyzing indicator with the progressive assistant bubble
+                    const analyzingIndicator = assistantTurn.querySelector('#currentAnalyzingState');
+                    if (analyzingIndicator) analyzingIndicator.remove();
+
+                    // Construct Assistant Bubble
+                    const assistantBubble = document.createElement('div');
+                    assistantBubble.className = 'assistant-bubble';
+
+                    // Build Sections
+                    let alternativesHtml = '';
+                    if (result.classification.alternatives && result.classification.alternatives.length > 0) {
+                        const bars = result.classification.alternatives.map(alt => `
+                            <div>
+                                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 3px;">
+                                    <span style="font-weight: 600;">${escapeHtml(alt.genre)}</span>
+                                    <span class="mono" style="color: var(--text-primary);">${alt.percent}%</span>
+                                </div>
+                                <div style="background: rgba(255,255,255,0.08); height: 6px; border-radius: 4px; overflow: hidden;">
+                                    <div style="background: var(--accent); height: 100%; width: ${alt.percent}%;"></div>
+                                </div>
+                            </div>
+                        `).join('');
+
+                        alternativesHtml = `
+                            <div class="alternatives-box" style="margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-subtle);">
+                                <span style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">Alternative Genre Probabilities:</span>
+                                <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+                                    ${bars}
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    let driversHtml = '';
+                    if (result.classification.explanation_factors && result.classification.explanation_factors.length > 0) {
+                        const listItems = result.classification.explanation_factors.map(f => `
+                            <li>${escapeHtml(f.description)} (measured value: ${f.measured_value})</li>
+                        `).join('');
+                        driversHtml = `
+                            <div class="explanation-factors" style="margin-top: 12px; font-size: 0.88rem; color: var(--text-secondary);">
+                                <span style="font-weight: 600; color: var(--text-primary);">Primary Acoustic Drivers:</span>
+                                <ul style="margin-left: 20px; margin-top: 6px; list-style-type: disc;">
+                                    ${listItems}
+                                </ul>
+                            </div>
+                        `;
+                    }
+
+                    let lowConfNotice = '';
+                    if (result.classification.is_low_confidence) {
+                        lowConfNotice = `
+                            <div class="low-confidence-notice" style="margin-top: 12px; padding: 10px 14px; background: var(--bg-card-subtle); border-left: 3px solid var(--status-warning); border-radius: 6px; color: var(--text-primary); font-size: 0.88rem;">
+                                <span><strong>Notice:</strong> The acoustic profile contains overlapping characteristics with secondary candidate genres.</span>
+                            </div>
+                        `;
+                    }
+
+                    let subgenreBadge = '';
+                    if (result.classification.subgenre && result.classification.subgenre.name) {
+                        subgenreBadge = `<span class="subgenre-badge" style="display: inline-block; margin-left: 8px; padding: 3px 10px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 9999px; font-size: 0.82rem; font-weight: 600;">↳ ${escapeHtml(result.classification.subgenre.name)}</span>`;
+                    }
+
+                    let genreTagsHtml = '';
+                    if (result.classification.genre_tags && result.classification.genre_tags.length > 1) {
+                        const tags = result.classification.genre_tags.map(t => `
+                            <span class="genre-tag-pill" style="font-size: 0.78rem; padding: 3px 10px; border-radius: 9999px; ${t.is_primary ? 'background: var(--brand-primary, #6366f1); color: #fff; font-weight: 600;' : 'background: var(--bg-card-subtle); color: var(--text-secondary); border: 1px solid var(--border-subtle);'}">
+                                ${escapeHtml(t.genre)} (${t.percent}%)
+                            </span>
+                        `).join('');
+                        genreTagsHtml = `
+                            <div class="genre-tags-container" style="margin-top: 10px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                <span style="font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600; letter-spacing: 0.05em;">Acoustic Influences:</span>
+                                ${tags}
+                            </div>
+                        `;
+                    }
+
+                    assistantBubble.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 12px;">
+                            <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.05em;">
+                                Audio Analysis &amp; Prototype Classification
+                            </span>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                ${result.analysis_id ? `<a href="/analysis/${result.analysis_id}/pdf" class="btn-export-pdf" style="padding: 4px 10px; background: rgba(37, 99, 235, 0.15); border: 1px solid rgba(37, 99, 235, 0.3); border-radius: 6px; color: #38bdf8; text-decoration: none; font-size: 0.78rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">📄 Download PDF Report</a>` : ''}
+                                <span style="font-size: 0.78rem; color: var(--text-muted);">
+                                    ${escapeHtml(result.classification.model_name)}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="genre-prediction-card" style="margin: 0;">
+                            <div class="prediction-header">
+                                <div>
+                                    <span class="prediction-label">PROTOTYPE PREDICTION:</span>
+                                    <span class="prediction-genre">${escapeHtml(result.classification.predicted_genre)}</span>
+                                    ${subgenreBadge}
+                                </div>
+                                <div class="badge-group">
+                                    <span class="confidence-badge" title="Model confidence probability">${result.classification.confidence_percent}% Confidence</span>
+                                    <span class="model-badge">${escapeHtml(result.classification.model_name)}</span>
+                                </div>
+                            </div>
+
+                            ${genreTagsHtml}
+                            ${lowConfNotice}
+
+                            <div class="explanation-callout" style="margin-top: 14px;">
+                                <strong>Why This Classification:</strong> ${escapeHtml(result.classification.explanation)}
+                            </div>
+
+                            ${driversHtml}
+                            ${alternativesHtml}
+                        </div>
+
+                        <div class="technical-details-toggle">
+                            <button type="button" class="btn-toggle-tech" onclick="toggleTechDetails(this)">
+                                <span>▶ Show technical acoustic properties</span>
+                            </button>
+
+                            <div class="technical-properties-content is-open">
+                                <h3 class="section-title" style="margin-bottom: 12px; font-size: 0.95rem;">Extracted Acoustic Properties (Tier 1 Measurements)</h3>
+                                <div class="features-grid">
+                                    <div class="feature-item">
+                                        <span class="feature-label">File Name</span>
+                                        <span class="feature-value code-font" title="${escapeHtml(result.features.file_name)}">${escapeHtml(result.features.file_name)}</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-label">Duration</span>
+                                        <span class="feature-value mono">${result.features.duration} seconds</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-label">Sample Rate</span>
+                                        <span class="feature-value mono">${result.features.sample_rate} Hz</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-label">Detected Key &amp; Mode</span>
+                                        <span class="feature-value mono" style="color: #38bdf8; font-weight: 700;">🎵 ${escapeHtml(result.features.detected_key || 'Unknown')}</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-label">Tempo</span>
+                                        <span class="feature-value mono">${result.features.tempo} BPM</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-label">RMS Energy (Mean &amp; Var)</span>
+                                        <span class="feature-value mono">${result.features.rms_mean} <small style="color:var(--text-muted);">(&plusmn;${result.features.rms_var})</small></span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-label">Zero Crossing Rate</span>
+                                        <span class="feature-value mono">${result.features.zcr_mean} <small style="color:var(--text-muted);">(&plusmn;${result.features.zcr_var})</small></span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-label">Spectral Centroid</span>
+                                        <span class="feature-value mono">${result.features.spectral_centroid} Hz</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-label">Spectral Bandwidth</span>
+                                        <span class="feature-value mono">${result.features.spectral_bandwidth_mean} Hz</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-label">Spectral Rolloff</span>
+                                        <span class="feature-value mono">${result.features.spectral_rolloff_mean} Hz</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-label">Spectral Contrast</span>
+                                        <span class="feature-value mono">${result.features.spectral_contrast_mean} dB</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-label">MFCC Timbre Mean</span>
+                                        <span class="feature-value mono">${result.features.mfcc_mean}</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-label">Onset Rate</span>
+                                        <span class="feature-value mono">${result.features.onset_rate} onsets/sec</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    assistantTurn.appendChild(assistantBubble);
+
+                    // Add Follow-up composer if not present
+                    let followUp = thread.querySelector('.subsequent-composer');
+                    if (!followUp) {
+                        followUp = document.createElement('div');
+                        followUp.className = 'subsequent-composer';
+                        followUp.innerHTML = `
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary);">Analyze another track</span>
+                                <a href="{{ url_for('analysis.index') }}" style="font-size: 0.78rem; color: var(--text-primary); text-decoration: none;">Reset thread</a>
+                            </div>
+                            <div class="composer-card" style="padding: 16px;">
+                                <form action="{{ url_for('analyze') }}" method="POST" enctype="multipart/form-data" class="upload-form subsequent-form">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                    <div class="composer-dropzone" style="padding: 20px 16px;">
+                                        <div class="composer-icon" style="font-size: 1.8rem; margin-bottom: 4px;">🎵</div>
+                                        <span class="composer-prompt" style="font-size: 0.9rem;">Drop another audio file or click to browse</span>
+                                        <input type="file" name="audio_file" accept=".wav,.mp3" required class="file-input" onchange="this.form.submit()">
+                                    </div>
+                                </form>
+                            </div>
+                        `;
+                        thread.appendChild(followUp);
+                    }
+
+                    assistantBubble.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+                } catch (err) {
+                    // Remove analyzing state and display clear error message
+                    const analyzingIndicator = assistantTurn.querySelector('#currentAnalyzingState');
+                    if (analyzingIndicator) analyzingIndicator.remove();
+
+                    const errBox = document.createElement('div');
+                    errBox.className = 'alert alert-error';
+                    errBox.innerHTML = `<span class="alert-icon">⚠️</span><span>${escapeHtml(err.message)}</span>`;
+                    assistantTurn.appendChild(errBox);
+                } finally {
+                    // Reset input
+                    audioInput.value = '';
+                    if (filePreview) filePreview.style.display = 'none';
+                    if (dropPrompt) dropPrompt.style.display = 'block';
+                    if (dropSubtext) dropSubtext.style.display = 'block';
+                    if (dropIcon) dropIcon.style.display = 'block';
+                    if (btnSubmit) {
+                        btnSubmit.disabled = false;
+                        btnSubmit.innerHTML = '<span class="btn-text">Analyze Music</span> <span class="btn-icon">⚡</span>';
+                    }
+                }
+            });
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function initMainWaveSurfer(containerId, playBtnId, timeId, audioUrl) {
+            const container = document.getElementById(containerId);
+            const playBtn = document.getElementById(playBtnId);
+            const timeDisplay = document.getElementById(timeId);
+            if (!container || !playBtn || !audioUrl) return;
+
+            if (window.WaveSurfer) {
+                try {
+                    const ws = WaveSurfer.create({
+                        container: container,
+                        waveColor: '#475569',
+                        progressColor: '#38bdf8',
+                        cursorColor: '#f8fafc',
+                        barWidth: 2,
+                        barGap: 2,
+                        barRadius: 2,
+                        height: 55,
+                        responsive: true,
+                        url: audioUrl,
+                    });
+                    window.activeWaveSurfer = ws;
+
+                    function formatTime(s) {
+                        const m = Math.floor(s / 60);
+                        const sc = Math.floor(s % 60);
+                        return `${m}:${sc < 10 ? '0' : ''}${sc}`;
+                    }
+
+                    ws.on('ready', () => {
+                        if (timeDisplay) timeDisplay.textContent = `0:00 / ${formatTime(ws.getDuration())}`;
+                    });
+                    ws.on('audioprocess', () => {
+                        if (timeDisplay) timeDisplay.textContent = `${formatTime(ws.getCurrentTime())} / ${formatTime(ws.getDuration())}`;
+                    });
+                    ws.on('finish', () => { playBtn.textContent = '▶'; });
+
+                    playBtn.addEventListener('click', () => {
+                        ws.playPause();
+                        playBtn.textContent = ws.isPlaying() ? '⏸' : '▶';
+                    });
+                    return ws;
+                } catch(e) {
+                    console.warn("WaveSurfer error:", e);
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const waveEl = document.getElementById('mainWaveform');
+            if (waveEl && waveEl.dataset.url) {
+                initMainWaveSurfer('mainWaveform', 'btnMainWavePlay', 'mainWaveTime', waveEl.dataset.url);
+            }
+        });
+
+        // WCAG 2.2 AA Keyboard Navigation for Audio Visualizer (Task 5.6)
+        document.addEventListener('keydown', (e) => {
+            const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+            if (activeTag === 'input' || activeTag === 'textarea' || activeTag === 'select') return;
+
+            const ws = window.activeWaveSurfer;
+            if (!ws) return;
+
+            if (e.code === 'Space') {
+                e.preventDefault();
+                ws.playPause();
+                const playBtn = document.getElementById('btnMainWavePlay');
+                if (playBtn) playBtn.textContent = ws.isPlaying() ? '⏸' : '▶';
+            } else if (e.key === 'j' || e.key === 'J' || e.key === 'ArrowLeft') {
+                e.preventDefault();
+                ws.skip(-5);
+            } else if (e.key === 'l' || e.key === 'L' || e.key === 'ArrowRight') {
+                e.preventDefault();
+                ws.skip(5);
+            } else if (e.key === 'k' || e.key === 'K') {
+                e.preventDefault();
+                ws.pause();
+                const playBtn = document.getElementById('btnMainWavePlay');
+                if (playBtn) playBtn.textContent = '▶';
+            }
+        });
+    </script>
+</body>
+</html>

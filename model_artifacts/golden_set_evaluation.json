@@ -1,0 +1,1050 @@
+{
+  "golden_test_set_size": 28,
+  "classes": [
+    "Ambient",
+    "Blues",
+    "Classical",
+    "Country",
+    "Disco",
+    "Hip-Hop",
+    "Jazz",
+    "Metal",
+    "Pop",
+    "Reggae",
+    "Rock"
+  ],
+  "old_single_window_metrics": {
+    "accuracy": 0.8214,
+    "macro_f1": 0.8398,
+    "macro_precision": 0.8636,
+    "macro_recall": 0.8636,
+    "ambient_prediction_rate": 0.1071,
+    "mean_ambient_probability": 0.0918,
+    "mean_latency_seconds": 0.5355,
+    "confusion_matrix": [
+      [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        4,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2
+      ]
+    ],
+    "per_class": {
+      "Ambient": {
+        "precision": 0.6667,
+        "recall": 1.0,
+        "f1_score": 0.8,
+        "support": 2
+      },
+      "Blues": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "support": 2
+      },
+      "Classical": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "support": 2
+      },
+      "Country": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1_score": 0.6667,
+        "support": 2
+      },
+      "Disco": {
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1_score": 0.8,
+        "support": 3
+      },
+      "Hip-Hop": {
+        "precision": 0.5,
+        "recall": 0.6667,
+        "f1_score": 0.5714,
+        "support": 3
+      },
+      "Jazz": {
+        "precision": 0.6667,
+        "recall": 1.0,
+        "f1_score": 0.8,
+        "support": 2
+      },
+      "Metal": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "support": 2
+      },
+      "Pop": {
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1_score": 0.8,
+        "support": 6
+      },
+      "Reggae": {
+        "precision": 0.6667,
+        "recall": 1.0,
+        "f1_score": 0.8,
+        "support": 2
+      },
+      "Rock": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "support": 2
+      }
+    }
+  },
+  "new_multi_segment_metrics": {
+    "accuracy": 0.8571,
+    "macro_f1": 0.8697,
+    "macro_precision": 0.8939,
+    "macro_recall": 0.8788,
+    "ambient_prediction_rate": 0.1071,
+    "mean_ambient_probability": 0.0931,
+    "mean_latency_seconds": 1.1572,
+    "confusion_matrix": [
+      [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        5,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2
+      ]
+    ],
+    "per_class": {
+      "Ambient": {
+        "precision": 0.6667,
+        "recall": 1.0,
+        "f1_score": 0.8,
+        "support": 2
+      },
+      "Blues": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "support": 2
+      },
+      "Classical": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "support": 2
+      },
+      "Country": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1_score": 0.6667,
+        "support": 2
+      },
+      "Disco": {
+        "precision": 1.0,
+        "recall": 0.6667,
+        "f1_score": 0.8,
+        "support": 3
+      },
+      "Hip-Hop": {
+        "precision": 0.6667,
+        "recall": 0.6667,
+        "f1_score": 0.6667,
+        "support": 3
+      },
+      "Jazz": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "support": 2
+      },
+      "Metal": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "support": 2
+      },
+      "Pop": {
+        "precision": 0.8333,
+        "recall": 0.8333,
+        "f1_score": 0.8333,
+        "support": 6
+      },
+      "Reggae": {
+        "precision": 0.6667,
+        "recall": 1.0,
+        "f1_score": 0.8,
+        "support": 2
+      },
+      "Rock": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "support": 2
+      }
+    }
+  },
+  "track_comparisons": [
+    {
+      "track_id": "golden_upload_01",
+      "filename": "3678530f84a641e08d8764d0a7bfb4e8_Aaron_Smith_-_Dancin_-_Krono_Remix.mp3",
+      "true_genre": "Disco",
+      "dataset_name": "Real Upload",
+      "original_duration": 243.17,
+      "old": {
+        "predicted": "Jazz",
+        "confidence": 0.4264,
+        "latency_s": 2.3531,
+        "analyzed_duration_s": 60.0
+      },
+      "new": {
+        "predicted": "Pop",
+        "confidence": 0.3273,
+        "latency_s": 1.2979,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 0.3701,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "golden_upload_02",
+      "filename": "57a678b66a594651ab01550b3f14549c_DELULU_DANCE_-_King.mp3",
+      "true_genre": "Pop",
+      "dataset_name": "Real Upload",
+      "original_duration": 257.97,
+      "old": {
+        "predicted": "Pop",
+        "confidence": 0.3988,
+        "latency_s": 0.8291,
+        "analyzed_duration_s": 60.0
+      },
+      "new": {
+        "predicted": "Pop",
+        "confidence": 0.512,
+        "latency_s": 1.2963,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 0.3489,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "golden_upload_03",
+      "filename": "6fde372d41ff40748f92c08233526f76_The_Weeknd_JENNIE_Lily-Rose_Depp_-_One_Of_The_Girls_Official_Video.mp3",
+      "true_genre": "Pop",
+      "dataset_name": "Real Upload",
+      "original_duration": 258.44,
+      "old": {
+        "predicted": "Pop",
+        "confidence": 0.2567,
+        "latency_s": 0.8289,
+        "analyzed_duration_s": 60.0
+      },
+      "new": {
+        "predicted": "Pop",
+        "confidence": 0.5402,
+        "latency_s": 1.2813,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 0.3482,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "golden_upload_04",
+      "filename": "9df4be33df0940d5ab426b49ecaca865_Telepatia_-_Kali_Uchis.mp3",
+      "true_genre": "Pop",
+      "dataset_name": "Real Upload",
+      "original_duration": 169.92,
+      "old": {
+        "predicted": "Hip-Hop",
+        "confidence": 0.348,
+        "latency_s": 0.8569,
+        "analyzed_duration_s": 60.0
+      },
+      "new": {
+        "predicted": "Pop",
+        "confidence": 0.5914,
+        "latency_s": 1.3238,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 0.5296,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "golden_upload_05",
+      "filename": "b4e2a35f3ca34825b457fd2ada7e3620_PYAAR_-_Naam_Sujal.mp3",
+      "true_genre": "Pop",
+      "dataset_name": "Real Upload",
+      "original_duration": 228.9,
+      "old": {
+        "predicted": "Hip-Hop",
+        "confidence": 0.7089,
+        "latency_s": 0.8286,
+        "analyzed_duration_s": 60.0
+      },
+      "new": {
+        "predicted": "Hip-Hop",
+        "confidence": 0.7669,
+        "latency_s": 1.3309,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 0.3932,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "golden_upload_06",
+      "filename": "e0a39e4c8ac94e649c7d78da5218c1fe_SHARMEELI_-_Frappe_Ash__toorjo_dey.mp3",
+      "true_genre": "Hip-Hop",
+      "dataset_name": "Real Upload",
+      "original_duration": 132.98,
+      "old": {
+        "predicted": "Reggae",
+        "confidence": 0.4309,
+        "latency_s": 0.83,
+        "analyzed_duration_s": 60.0
+      },
+      "new": {
+        "predicted": "Reggae",
+        "confidence": 0.3672,
+        "latency_s": 1.2828,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 0.6768,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "golden_ambient_01",
+      "filename": "fma_ambient_045387.mp3",
+      "true_genre": "Ambient",
+      "dataset_name": "Free Music Archive",
+      "original_duration": 30.0,
+      "old": {
+        "predicted": "Ambient",
+        "confidence": 0.9135,
+        "latency_s": 0.4162,
+        "analyzed_duration_s": 30.0
+      },
+      "new": {
+        "predicted": "Ambient",
+        "confidence": 0.9116,
+        "latency_s": 1.2913,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 1.0,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "golden_ambient_02",
+      "filename": "fma_ambient_075429.mp3",
+      "true_genre": "Ambient",
+      "dataset_name": "Free Music Archive",
+      "original_duration": 29.98,
+      "old": {
+        "predicted": "Ambient",
+        "confidence": 0.525,
+        "latency_s": 0.4241,
+        "analyzed_duration_s": 29.98
+      },
+      "new": {
+        "predicted": "Ambient",
+        "confidence": 0.525,
+        "latency_s": 0.4254,
+        "analyzed_duration_s": 29.98,
+        "coverage_ratio": 1.0,
+        "num_segments": 1
+      }
+    },
+    {
+      "track_id": "gtzan_blues_00012",
+      "filename": "gtzan_blues_blues.00012.wav",
+      "true_genre": "Blues",
+      "dataset_name": "GTZAN",
+      "original_duration": 30.01,
+      "old": {
+        "predicted": "Blues",
+        "confidence": 0.9215,
+        "latency_s": 0.4584,
+        "analyzed_duration_s": 30.01
+      },
+      "new": {
+        "predicted": "Blues",
+        "confidence": 0.9255,
+        "latency_s": 1.1349,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 1.0,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "gtzan_blues_00013",
+      "filename": "gtzan_blues_blues.00013.wav",
+      "true_genre": "Blues",
+      "dataset_name": "GTZAN",
+      "original_duration": 30.01,
+      "old": {
+        "predicted": "Blues",
+        "confidence": 0.9288,
+        "latency_s": 0.3767,
+        "analyzed_duration_s": 30.01
+      },
+      "new": {
+        "predicted": "Blues",
+        "confidence": 0.9291,
+        "latency_s": 1.1376,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 1.0,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "gtzan_classical_00011",
+      "filename": "gtzan_classical_classical.00011.wav",
+      "true_genre": "Classical",
+      "dataset_name": "GTZAN",
+      "original_duration": 30.01,
+      "old": {
+        "predicted": "Classical",
+        "confidence": 0.9319,
+        "latency_s": 0.3895,
+        "analyzed_duration_s": 30.01
+      },
+      "new": {
+        "predicted": "Classical",
+        "confidence": 0.9302,
+        "latency_s": 1.1345,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 1.0,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "gtzan_classical_00012",
+      "filename": "gtzan_classical_classical.00012.wav",
+      "true_genre": "Classical",
+      "dataset_name": "GTZAN",
+      "original_duration": 30.01,
+      "old": {
+        "predicted": "Classical",
+        "confidence": 0.969,
+        "latency_s": 0.386,
+        "analyzed_duration_s": 30.01
+      },
+      "new": {
+        "predicted": "Classical",
+        "confidence": 0.969,
+        "latency_s": 1.1448,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 1.0,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "gtzan_country_00030",
+      "filename": "gtzan_country_country.00030.wav",
+      "true_genre": "Country",
+      "dataset_name": "GTZAN",
+      "original_duration": 30.01,
+      "old": {
+        "predicted": "Ambient",
+        "confidence": 0.4973,
+        "latency_s": 0.3718,
+        "analyzed_duration_s": 30.01
+      },
+      "new": {
+        "predicted": "Ambient",
+        "confidence": 0.4918,
+        "latency_s": 1.1488,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 1.0,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "gtzan_country_00031",
+      "filename": "gtzan_country_country.00031.wav",
+      "true_genre": "Country",
+      "dataset_name": "GTZAN",
+      "original_duration": 30.01,
+      "old": {
+        "predicted": "Country",
+        "confidence": 0.3483,
+        "latency_s": 0.3721,
+        "analyzed_duration_s": 30.01
+      },
+      "new": {
+        "predicted": "Country",
+        "confidence": 0.3444,
+        "latency_s": 1.135,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 1.0,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "gtzan_disco_00001",
+      "filename": "gtzan_disco_disco.00001.wav",
+      "true_genre": "Disco",
+      "dataset_name": "GTZAN",
+      "original_duration": 30.21,
+      "old": {
+        "predicted": "Disco",
+        "confidence": 0.8644,
+        "latency_s": 0.3765,
+        "analyzed_duration_s": 30.21
+      },
+      "new": {
+        "predicted": "Disco",
+        "confidence": 0.8657,
+        "latency_s": 1.1615,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 1.0,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "gtzan_disco_00021",
+      "filename": "gtzan_disco_disco.00021.wav",
+      "true_genre": "Disco",
+      "dataset_name": "GTZAN",
+      "original_duration": 30.01,
+      "old": {
+        "predicted": "Disco",
+        "confidence": 0.7458,
+        "latency_s": 0.3801,
+        "analyzed_duration_s": 30.01
+      },
+      "new": {
+        "predicted": "Disco",
+        "confidence": 0.7455,
+        "latency_s": 1.1163,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 1.0,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "gtzan_hiphop_00000",
+      "filename": "gtzan_hiphop_hiphop.00000.wav",
+      "true_genre": "Hip-Hop",
+      "dataset_name": "GTZAN",
+      "original_duration": 30.0,
+      "old": {
+        "predicted": "Hip-Hop",
+        "confidence": 0.6004,
+        "latency_s": 0.3764,
+        "analyzed_duration_s": 30.0
+      },
+      "new": {
+        "predicted": "Hip-Hop",
+        "confidence": 0.5993,
+        "latency_s": 1.1441,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 1.0,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "gtzan_hiphop_00026",
+      "filename": "gtzan_hiphop_hiphop.00026.wav",
+      "true_genre": "Hip-Hop",
+      "dataset_name": "GTZAN",
+      "original_duration": 30.37,
+      "old": {
+        "predicted": "Hip-Hop",
+        "confidence": 0.8079,
+        "latency_s": 0.3834,
+        "analyzed_duration_s": 30.37
+      },
+      "new": {
+        "predicted": "Hip-Hop",
+        "confidence": 0.8078,
+        "latency_s": 1.1379,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 1.0,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "gtzan_jazz_00073",
+      "filename": "gtzan_jazz_jazz.00073.wav",
+      "true_genre": "Jazz",
+      "dataset_name": "GTZAN",
+      "original_duration": 30.01,
+      "old": {
+        "predicted": "Jazz",
+        "confidence": 0.8728,
+        "latency_s": 0.383,
+        "analyzed_duration_s": 30.01
+      },
+      "new": {
+        "predicted": "Jazz",
+        "confidence": 0.8729,
+        "latency_s": 1.1308,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 1.0,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "gtzan_jazz_00074",
+      "filename": "gtzan_jazz_jazz.00074.wav",
+      "true_genre": "Jazz",
+      "dataset_name": "GTZAN",
+      "original_duration": 30.01,
+      "old": {
+        "predicted": "Jazz",
+        "confidence": 0.9294,
+        "latency_s": 0.3767,
+        "analyzed_duration_s": 30.01
+      },
+      "new": {
+        "predicted": "Jazz",
+        "confidence": 0.9296,
+        "latency_s": 1.119,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 1.0,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "gtzan_metal_00012",
+      "filename": "gtzan_metal_metal.00012.wav",
+      "true_genre": "Metal",
+      "dataset_name": "GTZAN",
+      "original_duration": 30.0,
+      "old": {
+        "predicted": "Metal",
+        "confidence": 0.9777,
+        "latency_s": 0.3736,
+        "analyzed_duration_s": 30.0
+      },
+      "new": {
+        "predicted": "Metal",
+        "confidence": 0.9779,
+        "latency_s": 1.1296,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 1.0,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "gtzan_metal_00013",
+      "filename": "gtzan_metal_metal.00013.wav",
+      "true_genre": "Metal",
+      "dataset_name": "GTZAN",
+      "original_duration": 30.0,
+      "old": {
+        "predicted": "Metal",
+        "confidence": 0.9369,
+        "latency_s": 0.3838,
+        "analyzed_duration_s": 30.0
+      },
+      "new": {
+        "predicted": "Metal",
+        "confidence": 0.938,
+        "latency_s": 1.2014,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 1.0,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "gtzan_pop_00000",
+      "filename": "gtzan_pop_pop.00000.wav",
+      "true_genre": "Pop",
+      "dataset_name": "GTZAN",
+      "original_duration": 30.0,
+      "old": {
+        "predicted": "Pop",
+        "confidence": 0.9861,
+        "latency_s": 0.3773,
+        "analyzed_duration_s": 30.0
+      },
+      "new": {
+        "predicted": "Pop",
+        "confidence": 0.9861,
+        "latency_s": 1.1344,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 1.0,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "gtzan_pop_00001",
+      "filename": "gtzan_pop_pop.00001.wav",
+      "true_genre": "Pop",
+      "dataset_name": "GTZAN",
+      "original_duration": 30.0,
+      "old": {
+        "predicted": "Pop",
+        "confidence": 0.9025,
+        "latency_s": 0.3768,
+        "analyzed_duration_s": 30.0
+      },
+      "new": {
+        "predicted": "Pop",
+        "confidence": 0.9032,
+        "latency_s": 1.1357,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 1.0,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "gtzan_reggae_00034",
+      "filename": "gtzan_reggae_reggae.00034.wav",
+      "true_genre": "Reggae",
+      "dataset_name": "GTZAN",
+      "original_duration": 30.01,
+      "old": {
+        "predicted": "Reggae",
+        "confidence": 0.8771,
+        "latency_s": 0.3761,
+        "analyzed_duration_s": 30.01
+      },
+      "new": {
+        "predicted": "Reggae",
+        "confidence": 0.878,
+        "latency_s": 1.1934,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 1.0,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "gtzan_reggae_00035",
+      "filename": "gtzan_reggae_reggae.00035.wav",
+      "true_genre": "Reggae",
+      "dataset_name": "GTZAN",
+      "original_duration": 30.01,
+      "old": {
+        "predicted": "Reggae",
+        "confidence": 0.8611,
+        "latency_s": 0.3694,
+        "analyzed_duration_s": 30.01
+      },
+      "new": {
+        "predicted": "Reggae",
+        "confidence": 0.8593,
+        "latency_s": 1.1094,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 1.0,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "gtzan_rock_00010",
+      "filename": "gtzan_rock_rock.00010.wav",
+      "true_genre": "Rock",
+      "dataset_name": "GTZAN",
+      "original_duration": 30.01,
+      "old": {
+        "predicted": "Rock",
+        "confidence": 0.8104,
+        "latency_s": 0.3697,
+        "analyzed_duration_s": 30.01
+      },
+      "new": {
+        "predicted": "Rock",
+        "confidence": 0.8133,
+        "latency_s": 1.2064,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 1.0,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "gtzan_rock_00011",
+      "filename": "gtzan_rock_rock.00011.wav",
+      "true_genre": "Rock",
+      "dataset_name": "GTZAN",
+      "original_duration": 30.01,
+      "old": {
+        "predicted": "Rock",
+        "confidence": 0.7956,
+        "latency_s": 0.3693,
+        "analyzed_duration_s": 30.01
+      },
+      "new": {
+        "predicted": "Rock",
+        "confidence": 0.7872,
+        "latency_s": 1.1155,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 1.0,
+        "num_segments": 3
+      }
+    }
+  ]
+}

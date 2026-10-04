@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classroom Management — CLASSIFY</title>
+    {% include "partials/head.html" %}
+    <style>
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .classroom-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+        .classroom-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+        .enroll-form, .assign-form { margin-top: 10px; display: flex; gap: 8px; }
+    </style>
+</head>
+<body>
+    <div class="app-container" style="max-width: 1040px;">
+        <nav style="display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); margin-bottom: 24px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <a href="{{ url_for('teacher.dashboard') }}" style="font-weight: 800; font-size: 1.15rem; color: var(--text-primary); text-decoration: none;">CLASSIFY</a>
+                <span class="brand-badge" style="margin: 0; font-size: 0.7rem;">INSTRUCTOR</span>
+            </div>
+            <div style="display: flex; gap: 16px;">
+                <a href="{{ url_for('teacher.dashboard') }}" style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; font-weight: 600;">Queue</a>
+                <a href="{{ url_for('teacher.classrooms') }}" style="color: var(--text-primary); text-decoration: none; font-size: 0.85rem; font-weight: 600;">Classrooms</a>
+                <a href="{{ url_for('auth.logout') }}" style="color: var(--text-muted); text-decoration: none; font-size: 0.85rem;">Sign Out</a>
+            </div>
+        </nav>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div style="margin-bottom: 20px;">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}" style="padding: 12px 16px; border-radius: 8px; margin-bottom: 8px; background: rgba(37,99,235,0.15); border: 1px solid var(--border-strong);">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="page-header">
+            <div>
+                <h1 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 4px;">Classrooms &amp; Cohorts</h1>
+                <p style="color: var(--text-secondary); font-size: 0.88rem;">Manage student groups, assignments, and curriculum practice sessions.</p>
+            </div>
+        </div>
+
+        <!-- Create Classroom Card -->
+        <div class="card" style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 20px; margin-bottom: 28px;">
+            <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 12px;">Create New Classroom Cohort</h3>
+            <form action="{{ url_for('teacher.classrooms') }}" method="POST" style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <input type="text" name="name" placeholder="Classroom Name (e.g. Jazz Ensemble Fall 2026)" required style="flex: 2; min-width: 240px; padding: 10px 14px; background: var(--bg-card-subtle); border: 1px solid var(--border-subtle); border-radius: 6px; color: #fff;">
+                <input type="text" name="semester" placeholder="Semester (e.g. Fall 2026)" style="flex: 1; min-width: 140px; padding: 10px 14px; background: var(--bg-card-subtle); border: 1px solid var(--border-subtle); border-radius: 6px; color: #fff;">
+                <button type="submit" class="btn btn-primary" style="padding: 10px 20px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">Create Classroom</button>
+            </form>
+        </div>
+
+        <!-- Existing Classrooms Grid -->
+        <div class="classroom-grid">
+            {% for c in classrooms %}
+            <div class="classroom-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div>
+                        <h2 style="font-size: 1.15rem; font-weight: 700; color: #fff;">{{ c.name }}</h2>
+                        <span style="font-size: 0.78rem; color: var(--text-muted);">{{ c.semester or 'General Cohort' }} &bull; {{ c.enrollments|length }} Enrolled Students</span>
+                    </div>
+                    <a href="{{ url_for('teacher.dashboard', classroom_id=c.id) }}" style="font-size: 0.78rem; color: #38bdf8; text-decoration: none; font-weight: 600;">View Queue &rarr;</a>
+                </div>
+
+                <!-- Enroll Student Form -->
+                <div style="border-top: 1px solid var(--border-subtle); padding-top: 12px;">
+                    <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Enroll Student</span>
+                    <form action="{{ url_for('teacher.enroll_student', classroom_id=c.id) }}" method="POST" class="enroll-form">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        <input type="email" name="email" placeholder="student@music.edu" required style="flex: 1; padding: 6px 10px; background: var(--bg-card-subtle); border: 1px solid var(--border-subtle); border-radius: 4px; color: #fff; font-size: 0.8rem;">
+                        <button type="submit" style="padding: 6px 12px; background: var(--bg-card-subtle); border: 1px solid var(--border-strong); border-radius: 4px; color: #fff; font-size: 0.8rem; cursor: pointer;">Enroll</button>
+                    </form>
+                </div>
+
+                <!-- Create Assignment Form -->
+                <div style="border-top: 1px solid var(--border-subtle); padding-top: 12px;">
+                    <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Create Assignment</span>
+                    <form action="{{ url_for('teacher.create_assignment', classroom_id=c.id) }}" method="POST" style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        <input type="text" name="title" placeholder="Assignment Title (e.g. Blues Improvisation)" required style="padding: 6px 10px; background: var(--bg-card-subtle); border: 1px solid var(--border-subtle); border-radius: 4px; color: #fff; font-size: 0.8rem;">
+                        <input type="text" name="genre_focus" placeholder="Genre Focus (e.g. Blues)" style="padding: 6px 10px; background: var(--bg-card-subtle); border: 1px solid var(--border-subtle); border-radius: 4px; color: #fff; font-size: 0.8rem;">
+                        <button type="submit" style="padding: 6px 12px; background: #059669; border: none; border-radius: 4px; color: #fff; font-size: 0.8rem; font-weight: 600; cursor: pointer;">Publish Assignment</button>
+                    </form>
+                </div>
+
+                <!-- Active Assignments List -->
+                {% if c.assignments %}
+                <div style="border-top: 1px solid var(--border-subtle); padding-top: 10px;">
+                    <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Assignments:</span>
+                    <ul style="list-style: none; padding: 0; margin-top: 6px; font-size: 0.82rem;">
+                        {% for a in c.assignments %}
+                        <li style="display: flex; justify-content: space-between; padding: 4px 0;">
+                            <a href="{{ url_for('teacher.view_assignment', assignment_id=a.id) }}" style="color: #38bdf8; text-decoration: none;">{{ a.title }}</a>
+                            <span style="color: var(--text-muted);">{{ a.submissions|length }} Submissions</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+            {% else %}
+            <div style="grid-column: 1/-1; padding: 32px; text-align: center; color: var(--text-muted); background: var(--bg-card); border-radius: 8px;">
+                No classrooms created yet. Use the form above to add your first classroom cohort.
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

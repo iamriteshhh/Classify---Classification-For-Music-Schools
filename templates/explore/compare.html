@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ genre_a.name }} vs. {{ genre_b.name }} — Comparative Explore — CLASSIFY</title>
+    {% include "partials/head.html" %}
+    <style>
+        .global-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            margin-bottom: 24px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text-primary);
+        }
+        .auth-status {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.85rem;
+        }
+        .selector-bar {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+        .genre-select {
+            background: var(--bg-card-subtle);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            padding: 10px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+        }
+        .genre-select:focus {
+            border-color: var(--accent-primary);
+        }
+        .btn-compare {
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+        .btn-compare:hover {
+            background: var(--accent-primary-hover);
+        }
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        @media (max-width: 800px) {
+            .compare-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .instrument-tag {
+            display: inline-block;
+            background: var(--bg-card-subtle);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-subtle);
+            padding: 3px 9px;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            margin: 2px;
+        }
+        .acoustic-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-subtle);
+            font-size: 0.88rem;
+        }
+        .acoustic-row:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container" style="max-width: 1040px;">
+        <!-- Global Nav -->
+        <nav class="global-nav">
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <a href="/" style="font-weight: 800; font-size: 1.15rem; letter-spacing: -0.02em; color: var(--text-primary); text-decoration: none;">CLASSIFY</a>
+                <span class="brand-badge" style="margin: 0; font-size: 0.7rem;">EXPLORE</span>
+            </div>
+            <div class="nav-links">
+                <a href="/">Analyze</a>
+                <a href="/library">Genre Library</a>
+                <a href="/explore" class="active">Explore</a>
+                {% if current_user.is_authenticated %}
+                    {% if current_user.is_teacher() %}
+                        <a href="/teacher/dashboard">Teacher Dashboard</a>
+                    {% else %}
+                        <a href="/student/dashboard">My Dashboard</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class="auth-status">
+                {% if current_user.is_authenticated %}
+                    <span style="color: var(--text-muted); font-size: 0.85rem;">{{ current_user.email }}</span>
+                    <a href="/auth/logout" style="color: var(--accent-rose); text-decoration: none; font-size: 0.85rem; font-weight: 600;">Sign Out</a>
+                {% else %}
+                    <a href="/auth/login" style="color: var(--text-secondary); text-decoration: none; font-size: 0.88rem; font-weight: 500;">Sign In</a>
+                    <a href="/auth/register" style="background: var(--accent-primary); color: white; padding: 6px 14px; border-radius: var(--radius-sm); text-decoration: none; font-size: 0.85rem; font-weight: 600;">Sign Up</a>
+                {% endif %}
+            </div>
+        </nav>
+
+        <!-- Header -->
+        <header style="margin-bottom: 12px; text-align: center;">
+            <h1 style="font-size: 2rem; font-weight: 800; letter-spacing: -0.02em;">Comparative Musical Exploration</h1>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 4px;">
+                Side-by-side analysis contrasting acoustic properties, historical lineages, and structural frameworks.
+            </p>
+        </header>
+
+        <!-- Genre Comparison Selector -->
+        <form id="compare-form" class="selector-bar">
+            <select id="select-g1" class="genre-select">
+                {% for g in all_genres %}
+                    <option value="{{ g.slug }}" {% if g.id == genre_a.id %}selected{% endif %}>{{ g.name }}</option>
+                {% endfor %}
+            </select>
+
+            <span style="font-weight: 800; color: var(--text-muted); font-size: 1.1rem;">VS.</span>
+
+            <select id="select-g2" class="genre-select">
+                {% for g in all_genres %}
+                    <option value="{{ g.slug }}" {% if g.id == genre_b.id %}selected{% endif %}>{{ g.name }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="button" class="btn-compare" onclick="executeComparison()">Compare Genres</button>
+        </form>
+
+        <script>
+            function executeComparison() {
+                const g1 = document.getElementById('select-g1').value;
+                const g2 = document.getElementById('select-g2').value;
+                window.location.href = '/explore/compare/' + encodeURIComponent(g1) + '/' + encodeURIComponent(g2);
+            }
+        </script>
+
+        {% if is_identical %}
+            <div style="background: var(--bg-card-subtle); border: 1px solid var(--border-subtle); border-left: 3px solid var(--border-strong); border-radius: var(--radius-md); padding: 14px 20px; color: var(--text-primary); margin-bottom: 20px; font-size: var(--fs-sm);">
+                <strong>Notice:</strong> You are viewing the same genre on both sides. Select a second distinct genre above for a comparative contrast.
+            </div>
+        {% endif %}
+
+        <!-- Comparison Dual Column Grid -->
+        <div class="compare-grid">
+            <!-- Left: Genre A -->
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <div class="card" style="border-top: 3px solid var(--border-focus);">
+                    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;">
+                        <h2 style="font-size: 1.6rem; font-weight: 800;">{{ genre_a.name }}</h2>
+                        <a href="/library/{{ genre_a.slug }}" style="color: var(--text-primary); text-decoration: none; font-size: 0.85rem; font-weight: 600;">Full Profile &rarr;</a>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin-bottom: 16px;">
+                        {{ genre_a.description }}
+                    </p>
+
+                    <!-- Audio Exemplar Player (Phase 5 Task 5.7) -->
+                    <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span style="font-weight: 700; font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">🎧 Exemplar Audio Demonstration</span>
+                            <span class="mono" style="font-size: 0.74rem; color: var(--text-secondary);">{{ genre_a.name }}</span>
+                        </div>
+                        <audio controls style="width: 100%; height: 32px;" preload="none" aria-label="Audio demonstration for {{ genre_a.name }}">
+                            <source src="/static/audio/exemplars/{{ genre_a.slug }}.wav" type="audio/wav">
+                            Your browser does not support audio playback.
+                        </audio>
+                    </div>
+
+                    <!-- Acoustic Tendencies -->
+                    <div style="background: var(--bg-card-subtle); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 16px;">
+                        <div style="font-weight: 700; font-size: 0.82rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;">
+                            Acoustic Tendencies
+                        </div>
+                        <div class="acoustic-row">
+                            <span style="color: var(--text-muted);">Tempo Range</span>
+                            <strong class="mono" style="color: var(--text-primary);">{{ profile_a.bpm_range }}</strong>
+                        </div>
+                        <div class="acoustic-row">
+                            <span style="color: var(--text-muted);">Spectral Brightness</span>
+                            <strong class="mono" style="color: var(--text-primary);">{{ profile_a.brightness }}</strong>
+                        </div>
+                        <div class="acoustic-row">
+                            <span style="color: var(--text-muted);">Dynamic Energy</span>
+                            <strong class="mono" style="color: var(--text-primary);">{{ profile_a.energy }}</strong>
+                        </div>
+                    </div>
+
+                    <!-- Structures -->
+                    <div style="margin-bottom: 14px;">
+                        <span class="feature-label">Structural Framework</span>
+                        <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.5; margin-top: 4px;">
+                            {{ genre_a.typical_structures }}
+                        </p>
+                    </div>
+
+                    <!-- Instrumentation -->
+                    <div style="margin-bottom: 14px;">
+                        <span class="feature-label">Instrumentation</span>
+                        <div style="margin-top: 6px;">
+                            {% if genre_a.common_instrumentation %}
+                                {% for inst in genre_a.common_instrumentation.split(',') %}
+                                    <span class="instrument-tag">{{ inst.strip() }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Subgenres -->
+                    <div>
+                        <span class="feature-label">Subgenres ({{ genre_a.subgenres|length }})</span>
+                        <div style="margin-top: 6px; display: flex; flex-wrap: wrap; gap: 4px;">
+                            {% for sub in genre_a.subgenres %}
+                                <span class="genre-tag" style="font-size: 0.78rem;">{{ sub.name }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Genre B -->
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <div class="card" style="border-top: 3px solid var(--border-strong);">
+                    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;">
+                        <h2 style="font-size: 1.6rem; font-weight: 800;">{{ genre_b.name }}</h2>
+                        <a href="/library/{{ genre_b.slug }}" style="color: var(--text-primary); text-decoration: none; font-size: 0.85rem; font-weight: 600;">Full Profile &rarr;</a>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin-bottom: 16px;">
+                        {{ genre_b.description }}
+                    </p>
+
+                    <!-- Audio Exemplar Player (Phase 5 Task 5.7) -->
+                    <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span style="font-weight: 700; font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">🎧 Exemplar Audio Demonstration</span>
+                            <span class="mono" style="font-size: 0.74rem; color: var(--text-secondary);">{{ genre_b.name }}</span>
+                        </div>
+                        <audio controls style="width: 100%; height: 32px;" preload="none" aria-label="Audio demonstration for {{ genre_b.name }}">
+                            <source src="/static/audio/exemplars/{{ genre_b.slug }}.wav" type="audio/wav">
+                            Your browser does not support audio playback.
+                        </audio>
+                    </div>
+
+                    <!-- Acoustic Tendencies -->
+                    <div style="background: var(--bg-card-subtle); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 16px;">
+                        <div style="font-weight: 700; font-size: 0.82rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;">
+                            Acoustic Tendencies
+                        </div>
+                        <div class="acoustic-row">
+                            <span style="color: var(--text-muted);">Tempo Range</span>
+                            <strong style="color: var(--text-primary);">{{ profile_b.bpm_range }}</strong>
+                        </div>
+                        <div class="acoustic-row">
+                            <span style="color: var(--text-muted);">Spectral Brightness</span>
+                            <strong style="color: var(--text-primary);">{{ profile_b.brightness }}</strong>
+                        </div>
+                        <div class="acoustic-row">
+                            <span style="color: var(--text-muted);">Dynamic Energy</span>
+                            <strong style="color: var(--text-primary);">{{ profile_b.energy }}</strong>
+                        </div>
+                    </div>
+
+                    <!-- Structures -->
+                    <div style="margin-bottom: 14px;">
+                        <span class="feature-label">Structural Framework</span>
+                        <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.5; margin-top: 4px;">
+                            {{ genre_b.typical_structures }}
+                        </p>
+                    </div>
+
+                    <!-- Instrumentation -->
+                    <div style="margin-bottom: 14px;">
+                        <span class="feature-label">Instrumentation</span>
+                        <div style="margin-top: 6px;">
+                            {% if genre_b.common_instrumentation %}
+                                {% for inst in genre_b.common_instrumentation.split(',') %}
+                                    <span class="instrument-tag">{{ inst.strip() }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Subgenres -->
+                    <div>
+                        <span class="feature-label">Subgenres ({{ genre_b.subgenres|length }})</span>
+                        <div style="margin-top: 6px; display: flex; flex-wrap: wrap; gap: 4px;">
+                            {% for sub in genre_b.subgenres %}
+                                <span class="genre-tag" style="font-size: 0.78rem;">{{ sub.name }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

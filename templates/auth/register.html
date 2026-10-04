@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register — CLASSIFY Music Schools</title>
+    {% include "partials/head.html" %}
+    <style>
+        .auth-container {
+            max-width: 460px;
+            margin: 40px auto;
+        }
+        .auth-footer-links {
+            text-align: center;
+            margin-top: 20px;
+            font-size: var(--fs-sm);
+            color: var(--text-secondary);
+        }
+        .auth-footer-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .auth-footer-links a:hover {
+            text-decoration: underline;
+        }
+        .pwd-strength-bar {
+            height: 4px;
+            background: var(--bg-card-subtle);
+            border-radius: 2px;
+            margin-top: 6px;
+            overflow: hidden;
+        }
+        .pwd-strength-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--text-muted);
+            transition: width 0.2s ease, background 0.2s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container auth-container">
+        <!-- Brand Header -->
+        <header class="app-header">
+            <div class="brand-badge">JOIN CLASSIFY</div>
+            <h1 class="brand-title" style="font-size: 2.2rem;">Create Account</h1>
+            <p class="brand-description">Register as a Student or Teacher to unlock dashboards and reviews.</p>
+        </header>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            <span class="alert-icon" aria-hidden="true">{% if category == 'error' %}&#x2715;{% else %}&#x2713;{% endif %}</span>
+                            <span class="alert-text">{{ message }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Register Card -->
+        <div class="card">
+            <form action="{{ url_for('auth.register') }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <div class="form-group">
+                    <label class="form-label" for="email">School Email Address</label>
+                    <input type="email" name="email" id="email" required class="form-input" placeholder="name@music-school.edu">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="role">Account Type</label>
+                    <select name="role" id="role" class="form-select">
+                        <option value="student" selected>Student (Upload, Track Practice History &amp; Profile)</option>
+                        <option value="teacher">Teacher (Review Student Analyses &amp; Topics)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">Password (minimum 10 characters)</label>
+                    <input type="password" name="password" id="password" required minlength="10" maxlength="128" class="form-input" placeholder="••••••••••••" oninput="checkStrength(this.value)">
+                    <div class="pwd-strength-bar">
+                        <div class="pwd-strength-fill" id="strength-meter"></div>
+                    </div>
+                    <span id="strength-label" style="font-size: var(--fs-xs); color: var(--text-muted); margin-top: 4px;">Minimum 10 characters required</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="confirm_password">Confirm Password</label>
+                    <input type="password" name="confirm_password" id="confirm_password" required minlength="10" maxlength="128" class="form-input" placeholder="••••••••••••">
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                    <span>Create Account</span>
+                    <span>&rarr;</span>
+                </button>
+            </form>
+
+            <div class="auth-footer-links">
+                Already have an account? <a href="{{ url_for('auth.login') }}">Sign In</a>
+                <br><br>
+                <a href="{{ url_for('analysis.index') }}">&larr; Back to Audio Analyzer</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function checkStrength(pwd) {
+            const meter = document.getElementById('strength-meter');
+            const label = document.getElementById('strength-label');
+            if (!pwd || pwd.length < 10) {
+                meter.style.width = '25%';
+                meter.style.background = 'var(--text-muted)';
+                label.textContent = 'Too short (minimum 10 characters required)';
+            } else if (pwd.length < 14) {
+                meter.style.width = '60%';
+                meter.style.background = 'var(--status-warning)';
+                label.textContent = 'Good length';
+            } else {
+                meter.style.width = '100%';
+                meter.style.background = 'var(--text-primary)';
+                label.textContent = 'Strong length';
+            }
+        }
+    </script>
+</body>
+</html>

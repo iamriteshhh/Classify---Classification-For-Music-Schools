@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ assignment.title }} — Submissions</title>
+    {% include "partials/head.html" %}
+</head>
+<body>
+    <div class="app-container" style="max-width: 1040px;">
+        <nav style="display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); margin-bottom: 24px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <a href="{{ url_for('teacher.dashboard') }}" style="font-weight: 800; font-size: 1.15rem; color: var(--text-primary); text-decoration: none;">CLASSIFY</a>
+                <span class="brand-badge" style="margin: 0; font-size: 0.7rem;">INSTRUCTOR</span>
+            </div>
+            <div style="display: flex; gap: 16px;">
+                <a href="{{ url_for('teacher.classrooms') }}" style="color: var(--text-primary); text-decoration: none; font-size: 0.85rem; font-weight: 600;">&larr; Back to Classrooms</a>
+            </div>
+        </nav>
+
+        <div style="margin-bottom: 24px;">
+            <h1 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 4px;">{{ assignment.title }}</h1>
+            <p style="color: var(--text-secondary); font-size: 0.88rem;">
+                Classroom: <strong>{{ assignment.classroom.name }}</strong> &bull; Focus: <strong>{{ assignment.genre_focus or 'Open Genre' }}</strong>
+            </p>
+        </div>
+
+        <div class="card" style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 20px;">
+            <h2 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 16px;">Student Submissions ({{ assignment.submissions|length }})</h2>
+            {% if assignment.submissions %}
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid var(--border-subtle); text-align: left; color: var(--text-muted);">
+                            <th style="padding: 10px;">Student</th>
+                            <th style="padding: 10px;">Track Name</th>
+                            <th style="padding: 10px;">Submitted</th>
+                            <th style="padding: 10px;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sub in assignment.submissions %}
+                        <tr style="border-bottom: 1px solid var(--border-subtle);">
+                            <td style="padding: 12px 10px;">{{ sub.student.user.email }}</td>
+                            <td style="padding: 12px 10px; font-weight: 600;">{{ sub.song.original_filename }}</td>
+                            <td style="padding: 12px 10px; color: var(--text-muted);">{{ sub.submitted_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td style="padding: 12px 10px;">
+                                {% if sub.song.analysis %}
+                                    <a href="{{ url_for('teacher.review', analysis_id=sub.song.analysis.id) }}" style="color: #38bdf8; text-decoration: none; font-weight: 600;">Review Submission &rarr;</a>
+                                {% else %}
+                                    <span style="color: var(--text-muted);">Pending Analysis</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p style="color: var(--text-muted); text-align: center; padding: 24px 0;">No student submissions recorded for this assignment yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,65 @@
+{
+  "summary": {
+    "total_candidates_examined": 1019,
+    "total_accepted": 1019,
+    "total_rejected": 0,
+    "acceptance_rate": 1.0
+  },
+  "by_genre": {
+    "Blues": {
+      "accepted": 100,
+      "rejected": 0
+    },
+    "Classical": {
+      "accepted": 99,
+      "rejected": 0
+    },
+    "Country": {
+      "accepted": 98,
+      "rejected": 0
+    },
+    "Disco": {
+      "accepted": 93,
+      "rejected": 0
+    },
+    "Hip-Hop": {
+      "accepted": 92,
+      "rejected": 0
+    },
+    "Jazz": {
+      "accepted": 86,
+      "rejected": 0
+    },
+    "Metal": {
+      "accepted": 91,
+      "rejected": 0
+    },
+    "Pop": {
+      "accepted": 84,
+      "rejected": 0
+    },
+    "Reggae": {
+      "accepted": 86,
+      "rejected": 0
+    },
+    "Rock": {
+      "accepted": 100,
+      "rejected": 0
+    },
+    "Ambient": {
+      "accepted": 90,
+      "rejected": 0
+    }
+  },
+  "by_source": {
+    "GTZAN": {
+      "accepted": 929,
+      "rejected": 0
+    },
+    "FMA": {
+      "accepted": 90,
+      "rejected": 0
+    }
+  },
+  "rejections": []
+}

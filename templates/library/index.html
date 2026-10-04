@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genre Reference Library — CLASSIFY</title>
+    {% include "partials/head.html" %}
+</head>
+<body class="has-app-shell">
+    <div class="app-shell app-shell--library" id="libraryShell">
+        <!-- Slim Top Bar (56px) -->
+        <header class="app-shell__topbar">
+            <div class="app-shell__topbar-left">
+                <a href="/" class="app-shell__topbar-brand">
+                    <span>CLASSIFY</span>
+                    <span class="genre-badge" style="font-size: 0.65rem; padding: 2px 8px;">CURRICULUM</span>
+                </a>
+            </div>
+
+            <nav class="app-shell__topbar-nav">
+                <a href="/" class="app-shell__topbar-link">Analyze</a>
+                <a href="/library" class="app-shell__topbar-link active">Genre Library</a>
+                <a href="/explore" class="app-shell__topbar-link">Explore</a>
+                {% if current_user.is_authenticated %}
+                    {% if current_user.is_teacher() %}
+                        <a href="/teacher/dashboard" class="app-shell__topbar-link">Teacher Dashboard</a>
+                    {% else %}
+                        <a href="/student/dashboard" class="app-shell__topbar-link">My Dashboard</a>
+                    {% endif %}
+                {% endif %}
+            </nav>
+
+            <div class="auth-status">
+                {% if current_user.is_authenticated %}
+                    <span class="mono" style="color: var(--text-muted); font-size: var(--fs-xs);">{{ current_user.email }}</span>
+                    <a href="/auth/logout" class="btn btn-destructive" style="padding: 4px 10px; font-size: var(--fs-xs);">Sign Out</a>
+                {% else %}
+                    <a href="/auth/login" class="btn btn-secondary" style="padding: 4px 12px; font-size: var(--fs-xs);">Sign In</a>
+                    <a href="/auth/register" class="btn btn-primary" style="padding: 4px 12px; font-size: var(--fs-xs);">Sign Up</a>
+                {% endif %}
+            </div>
+        </header>
+
+        <!-- Two-Pane App Shell Body -->
+        <div class="app-shell__content">
+            <!-- Left Pane: Genre Sidebar -->
+            <aside class="app-shell__sidebar" aria-label="Genre Catalog Navigation">
+                <div class="app-shell__sidebar-header">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span class="app-shell__sidebar-title">Genre Reference Library</span>
+                        <span class="genre-badge">{{ genres|length }} Traditions</span>
+                    </div>
+                    <form method="GET" action="/library" style="display: flex; gap: 6px;">
+                        <input type="text" name="q" value="{{ search_query }}" placeholder="Filter genres..." class="form-input" style="padding: 6px 10px; font-size: var(--fs-xs); width: 100%;">
+                    </form>
+                </div>
+
+                <div class="app-shell__genre-list">
+                    {% for g in genres %}
+                        <a href="/library/{{ g.slug }}"
+                           class="app-shell__genre-item {% if active_genre and active_genre.id == g.id %}active{% endif %}"
+                           data-slug="{{ g.slug }}"
+                           id="genre-item-{{ g.slug }}">
+                            <span class="app-shell__genre-item-name">{{ g.name }}</span>
+                            <span class="mono" style="font-size: var(--fs-xs); color: var(--text-muted); display: block; margin-top: 2px;">{{ g.subgenres|length }} Subgenres</span>
+                            <span class="app-shell__genre-item-desc">{{ g.description }}</span>
+                        </a>
+                    {% endfor %}
+                </div>
+            </aside>
+
+            <!-- Right Pane: Main Study View -->
+            <main class="app-shell__main" id="study-panel-container">
+                <div class="study-panel__empty">
+                    <div class="mono" style="font-size: 2.2rem; color: var(--text-muted);">&#x266B;</div>
+                    <h2 class="study-panel__empty-title">Select a Genre to Begin Studying</h2>
+                    <p class="study-panel__empty-desc">
+                        Select a musical tradition from the left panel to explore its acoustic profile,
+                        spectral brightness, zero-crossing rate, subgenres, and pedagogical curriculum topics.
+                    </p>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="/static/js/study-panel.js"></script>
+</body>
+</html>

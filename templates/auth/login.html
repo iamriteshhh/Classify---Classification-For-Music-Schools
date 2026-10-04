@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In — CLASSIFY Music Schools</title>
+    {% include "partials/head.html" %}
+    <style>
+        .auth-container {
+            max-width: 440px;
+            margin: 40px auto;
+        }
+        .auth-footer-links {
+            text-align: center;
+            margin-top: 20px;
+            font-size: var(--fs-sm);
+            color: var(--text-secondary);
+        }
+        .auth-footer-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .auth-footer-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container auth-container">
+        <!-- Brand Header -->
+        <header class="app-header">
+            <div class="brand-badge">AUTHENTICATION</div>
+            <h1 class="brand-title" style="font-size: 2.2rem;">Welcome Back</h1>
+            <p class="brand-description">Sign in to access your analysis history and dashboard.</p>
+        </header>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            <span class="alert-icon" aria-hidden="true">{% if category == 'error' %}&#x2715;{% else %}&#x2713;{% endif %}</span>
+                            <span class="alert-text">{{ message }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Login Card -->
+        <div class="card">
+            <form action="{{ url_for('auth.login') }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <div class="form-group">
+                    <label class="form-label" for="email">Email Address</label>
+                    <input type="email" name="email" id="email" required class="form-input" placeholder="student@music-school.edu">
+                </div>
+
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                        <label class="form-label" for="password">Password</label>
+                        <a href="{{ url_for('auth.reset_request') }}" style="color: var(--text-muted); font-size: var(--fs-xs); text-decoration: none;">Forgot password?</a>
+                    </div>
+                    <input type="password" name="password" id="password" required class="form-input" placeholder="••••••••">
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+                    <input type="checkbox" name="remember" id="remember">
+                    <label for="remember" style="font-size: var(--fs-xs); color: var(--text-secondary); cursor: pointer;">Remember me for 14 days</label>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 6px;">
+                    <span>Sign In</span>
+                    <span>&rarr;</span>
+                </button>
+            </form>
+
+            <div class="auth-footer-links">
+                Don't have an account? <a href="{{ url_for('auth.register') }}">Create an account</a>
+                <br><br>
+                <a href="{{ url_for('analysis.index') }}">&larr; Back to Audio Analyzer</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard — CLASSIFY</title>
+    {% include "partials/head.html" %}
+    <style>
+        .filter-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 20px 24px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: flex-end;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+            min-width: 180px;
+        }
+        .filter-group label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .filter-select, .filter-input {
+            background: var(--bg-card-subtle);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 0.92rem;
+            outline: none;
+        }
+        .filter-select:focus, .filter-input:focus {
+            border-color: var(--accent-primary);
+        }
+        .btn-filter {
+            background: var(--accent-primary);
+            color: var(--bg-canvas);
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.15s ease;
+            height: 42px;
+        }
+        .btn-filter:hover {
+            opacity: 0.9;
+        }
+        .btn-reset {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-subtle);
+            padding: 10px 16px;
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            font-size: 0.88rem;
+            display: inline-flex;
+            align-items: center;
+            height: 42px;
+        }
+        .badge-status-pending {
+            background: var(--bg-card-subtle);
+            color: var(--text-secondary);
+            border: 1px dashed var(--border-strong);
+            padding: 3px 10px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .badge-status-reviewed {
+            background: var(--bg-card-subtle);
+            color: var(--text-primary);
+            border: 1px solid var(--border-strong);
+            padding: 3px 10px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .btn-review-action {
+            display: inline-block;
+            background: var(--bg-card-subtle);
+            color: var(--text-primary);
+            border: 1px solid var(--border-strong);
+            padding: 6px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 0.84rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.15s ease;
+        }
+        .btn-review-action:hover {
+            background: var(--accent-primary);
+            color: var(--bg-canvas);
+        }
+        .global-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            margin-bottom: 24px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.15s ease;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text-primary);
+        }
+        .auth-status {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .user-pill {
+            background: var(--bg-card-subtle);
+            border: 1px solid var(--border-subtle);
+            padding: 4px 10px;
+            border-radius: 9999px;
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container" style="max-width: 1040px;">
+        <!-- Global Nav Header -->
+        <nav class="global-nav">
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <span style="font-weight: 800; font-size: 1.15rem; letter-spacing: -0.02em; color: var(--text-primary);">CLASSIFY</span>
+                <span class="brand-badge" style="margin: 0; font-size: 0.7rem;">INSTRUCTOR</span>
+            </div>
+            <div class="nav-links">
+                <a href="/">Analyze</a>
+                <a href="/teacher/dashboard" class="active">Submissions</a>
+                <a href="/library">Genre Library</a>
+                <a href="/explore">Explore</a>
+            </div>
+            <div class="auth-status">
+                <span class="user-pill">{{ current_user.email }}</span>
+                <a href="/auth/logout" style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; font-weight: 500;">Sign Out</a>
+            </div>
+        </nav>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-container">
+                    {% for category, message in messages %}
+                        <div class="flash-card flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Header -->
+        <header style="margin-bottom: 8px;">
+            <h1 style="font-size: 1.8rem; font-weight: 800; letter-spacing: -0.02em;">Instructor Review Dashboard</h1>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 4px;">
+                Inspect student audio submissions, evaluate machine learning acoustic predictions, and submit pedagogical reviews.
+            </p>
+        </header>
+
+        <!-- Metrics Overview -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-label">Total Submissions</span>
+                <span class="stat-value mono">{{ total_submissions }}</span>
+                <span class="stat-hint">All student audio files</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Pending Reviews</span>
+                <span class="stat-value mono">{{ pending_count }}</span>
+                <span class="stat-hint">Awaiting instructor evaluation</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Completed Reviews</span>
+                <span class="stat-value mono">{{ reviewed_count }}</span>
+                <span class="stat-hint">Pedagogical feedback recorded</span>
+            </div>
+        </div>
+
+        <!-- Filter Controls -->
+        <form method="GET" action="/teacher/dashboard" class="filter-card">
+            <div class="filter-group">
+                <label for="status">Review Status</label>
+                <select name="status" id="status" class="filter-select">
+                    <option value="all" {% if selected_status == 'all' %}selected{% endif %}>All Submissions</option>
+                    <option value="pending" {% if selected_status == 'pending' %}selected{% endif %}>Pending Review</option>
+                    <option value="reviewed" {% if selected_status == 'reviewed' %}selected{% endif %}>Reviewed</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="genre">Predicted Genre</label>
+                <select name="genre" id="genre" class="filter-select">
+                    <option value="all" {% if selected_genre == 'all' %}selected{% endif %}>All Genres</option>
+                    {% for g in available_genres %}
+                        <option value="{{ g.name }}" {% if selected_genre == g.name %}selected{% endif %}>{{ g.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group" style="flex: 1.5;">
+                <label for="student">Student Email</label>
+                <input type="text" name="student" id="student" class="filter-input" placeholder="Search by student email..." value="{{ student_filter }}">
+            </div>
+
+            <div style="display: flex; gap: 8px;">
+                <button type="submit" class="btn-filter">Filter Queue</button>
+                <a href="/teacher/dashboard" class="btn-reset">Reset</a>
+            </div>
+        </form>
+
+        <!-- Submissions Table -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Student Submissions Queue ({{ submissions|length }})</h2>
+                <span class="card-subtitle">Chronological record of student audio uploads</span>
+            </div>
+
+            {% if submissions %}
+                <div style="overflow-x: auto;">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>Student</th>
+                                <th>Track Name</th>
+                                <th>Model Prediction</th>
+                                <th>Confidence</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sub in submissions %}
+                                <tr>
+                                    <td style="color: var(--text-muted); font-size: 0.85rem; white-space: nowrap;">
+                                        {{ sub.analyzed_at.strftime('%Y-%m-%d %H:%M') }}
+                                    </td>
+                                    <td style="font-weight: 500; font-size: 0.9rem;">
+                                        {{ sub.song.student.user.email if (sub.song and sub.song.student and sub.song.student.user) else 'Anonymous / Guest' }}
+                                    </td>
+                                    <td class="mono" style="font-size: 0.85rem;">
+                                        {{ sub.song.original_filename if sub.song else 'Untitled' }}
+                                    </td>
+                                    <td>
+                                        <span class="genre-tag">
+                                             {{ sub.prediction.genre.name if (sub.prediction and sub.prediction.genre) else 'Unknown' }}
+                                        </span>
+                                    </td>
+                                    <td class="mono" style="font-size: 0.88rem;">
+                                        {% if sub.prediction %}
+                                            {{ "%.1f"|format(sub.prediction.confidence * 100) }}%
+                                        {% else %}
+                                            —
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if sub.teacher_review %}
+                                            <span class="badge-status-reviewed">
+                                                Reviewed {% if not sub.teacher_review.agrees_with_model %}(Disagreed){% endif %}
+                                            </span>
+                                        {% else %}
+                                            <span class="badge-status-pending">Pending Review</span>
+                                        {% endif %}
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <a href="/teacher/review/{{ sub.id }}" class="btn-review-action">
+                                            {% if sub.teacher_review %}Edit Review{% else %}Review Track{% endif %}
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <p style="font-size: 1rem; color: var(--text-secondary); margin-bottom: 8px;">No submissions found matching your filters.</p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Adjust filter criteria or reset to view all student uploads.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,188 @@
+{
+  "winning_model": "Random Forest",
+  "candidate_comparison": {
+    "Random Forest": {
+      "val_macro_f1": 1.0,
+      "val_accuracy": 1.0,
+      "val_precision": 1.0,
+      "val_recall": 1.0
+    },
+    "Gradient Boosting": {
+      "val_macro_f1": 1.0,
+      "val_accuracy": 1.0,
+      "val_precision": 1.0,
+      "val_recall": 1.0
+    },
+    "Support Vector Machine (RBF)": {
+      "val_macro_f1": 1.0,
+      "val_accuracy": 1.0,
+      "val_precision": 1.0,
+      "val_recall": 1.0
+    },
+    "K-Nearest Neighbors": {
+      "val_macro_f1": 1.0,
+      "val_accuracy": 1.0,
+      "val_precision": 1.0,
+      "val_recall": 1.0
+    }
+  },
+  "test_metrics": {
+    "macro_f1": 1.0,
+    "accuracy": 1.0,
+    "weighted_f1": 1.0,
+    "macro_precision": 1.0,
+    "macro_recall": 1.0,
+    "classes": [
+      "Ambient",
+      "Jazz",
+      "Pop"
+    ],
+    "confusion_matrix": [
+      [
+        3,
+        0,
+        0
+      ],
+      [
+        0,
+        3,
+        0
+      ],
+      [
+        0,
+        0,
+        6
+      ]
+    ],
+    "per_class": {
+      "Ambient": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "support": 3
+      },
+      "Jazz": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "support": 3
+      },
+      "Pop": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "support": 6
+      }
+    }
+  },
+  "class_labels": [
+    "Ambient",
+    "Classical",
+    "Jazz",
+    "Metal",
+    "Pop",
+    "Rock"
+  ],
+  "feature_names": [
+    "tempo",
+    "rms_mean",
+    "rms_var",
+    "zcr_mean",
+    "zcr_var",
+    "spectral_centroid_mean",
+    "spectral_centroid_var",
+    "spectral_bandwidth_mean",
+    "spectral_bandwidth_var",
+    "spectral_rolloff_mean",
+    "spectral_rolloff_var",
+    "spectral_contrast_mean",
+    "spectral_contrast_var",
+    "spectral_contrast_band_0",
+    "spectral_contrast_band_1",
+    "spectral_contrast_band_2",
+    "spectral_contrast_band_3",
+    "spectral_contrast_band_4",
+    "spectral_contrast_band_5",
+    "spectral_contrast_band_6",
+    "mfcc_mean_0",
+    "mfcc_mean_1",
+    "mfcc_mean_2",
+    "mfcc_mean_3",
+    "mfcc_mean_4",
+    "mfcc_mean_5",
+    "mfcc_mean_6",
+    "mfcc_mean_7",
+    "mfcc_mean_8",
+    "mfcc_mean_9",
+    "mfcc_mean_10",
+    "mfcc_mean_11",
+    "mfcc_mean_12",
+    "mfcc_mean_13",
+    "mfcc_mean_14",
+    "mfcc_mean_15",
+    "mfcc_mean_16",
+    "mfcc_mean_17",
+    "mfcc_mean_18",
+    "mfcc_mean_19",
+    "mfcc_var_0",
+    "mfcc_var_1",
+    "mfcc_var_2",
+    "mfcc_var_3",
+    "mfcc_var_4",
+    "mfcc_var_5",
+    "mfcc_var_6",
+    "mfcc_var_7",
+    "mfcc_var_8",
+    "mfcc_var_9",
+    "mfcc_var_10",
+    "mfcc_var_11",
+    "mfcc_var_12",
+    "mfcc_var_13",
+    "mfcc_var_14",
+    "mfcc_var_15",
+    "mfcc_var_16",
+    "mfcc_var_17",
+    "mfcc_var_18",
+    "mfcc_var_19",
+    "chroma_mean_0",
+    "chroma_mean_1",
+    "chroma_mean_2",
+    "chroma_mean_3",
+    "chroma_mean_4",
+    "chroma_mean_5",
+    "chroma_mean_6",
+    "chroma_mean_7",
+    "chroma_mean_8",
+    "chroma_mean_9",
+    "chroma_mean_10",
+    "chroma_mean_11",
+    "chroma_var_0",
+    "chroma_var_1",
+    "chroma_var_2",
+    "chroma_var_3",
+    "chroma_var_4",
+    "chroma_var_5",
+    "chroma_var_6",
+    "chroma_var_7",
+    "chroma_var_8",
+    "chroma_var_9",
+    "chroma_var_10",
+    "chroma_var_11",
+    "onset_strength_mean",
+    "onset_strength_var",
+    "onset_rate",
+    "mel_spectrogram_mean",
+    "mel_spectrogram_var"
+  ],
+  "num_features": 89,
+  "split_summary": {
+    "train_tracks": 48,
+    "val_tracks": 12,
+    "test_tracks": 12,
+    "total_tracks": 72,
+    "artists_train": 16,
+    "artists_val": 4,
+    "artists_test": 4,
+    "zero_artist_leakage_verified": true
+  }
+}

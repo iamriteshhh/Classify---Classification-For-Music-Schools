@@ -1,0 +1,172 @@
+<!-- Study Panel Detail Fragment (final_design.md §3.3) -->
+<div class="study-panel" id="study-panel-root" data-genre-slug="{{ genre.slug }}">
+    <!-- Mobile Back Navigation (<1024px) -->
+    <button type="button" class="study-panel__mobile-back" id="mobile-back-btn" onclick="StudyPanel.closeMobileDetail()">
+        <span>&larr;</span> <span>Back to All Genres</span>
+    </button>
+
+    <!-- Header Section -->
+    <header class="study-panel__header" id="section-overview">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 10px;">
+            <h1 class="study-panel__title">{{ genre.name }}</h1>
+            <span class="genre-badge">{{ subgenres|length }} Subgenres Registered</span>
+        </div>
+        <p class="study-panel__desc">{{ genre.description }}</p>
+
+        {% if teaching_guide and teaching_guide.listening_focus %}
+            <div class="study-panel__listening-focus">
+                <strong style="display: block; font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 4px;">Pedagogical Listening Focus</strong>
+                {{ teaching_guide.listening_focus }}
+            </div>
+        {% endif %}
+    </header>
+
+    <!-- Sticky In-Panel Sub-Navigation -->
+    <nav class="study-panel__subnav" aria-label="Genre study sections">
+        <a href="#section-overview" class="study-panel__subnav-pill active">Overview</a>
+        <a href="#section-acoustics" class="study-panel__subnav-pill">Acoustic Profile</a>
+        <a href="#section-pedagogy" class="study-panel__subnav-pill">Teaching Topics</a>
+        <a href="#section-structure" class="study-panel__subnav-pill">Structure &amp; History</a>
+        <a href="#section-examples" class="study-panel__subnav-pill">Examples &amp; Compare</a>
+    </nav>
+
+    <!-- Acoustic Profile Section (§3.3 Item 2) -->
+    <section class="study-panel__section" id="section-acoustics">
+        <div class="study-panel__section-title">Acoustic Profile &amp; Physical Descriptors</div>
+        <div class="study-panel__stat-grid">
+            <!-- Tempo / BPM -->
+            <div class="study-panel__stat-card">
+                <span class="study-panel__stat-label">Rhythmic Tempo</span>
+                <span class="study-panel__stat-value mono">{{ acoustic_info.bpm_range }}</span>
+                {% if teaching_guide and teaching_guide.tempo_note %}
+                    <span class="study-panel__stat-note">{{ teaching_guide.tempo_note }}</span>
+                {% endif %}
+            </div>
+
+            <!-- Spectral Centroid / Brightness -->
+            <div class="study-panel__stat-card">
+                <span class="study-panel__stat-label">Spectral Brightness</span>
+                <span class="study-panel__stat-value mono">{{ acoustic_info.brightness }}</span>
+                {% if teaching_guide and teaching_guide.spectral_note %}
+                    <span class="study-panel__stat-note">{{ teaching_guide.spectral_note }}</span>
+                {% endif %}
+            </div>
+
+            <!-- Dynamic Energy Level -->
+            <div class="study-panel__stat-card">
+                <span class="study-panel__stat-label">Dynamic Energy</span>
+                <span class="study-panel__stat-value mono">{{ acoustic_info.energy }}</span>
+                <span class="study-panel__stat-note">{{ acoustic_info.dynamics }}</span>
+            </div>
+
+            <!-- Sample Rate Standards -->
+            <div class="study-panel__stat-card">
+                <span class="study-panel__stat-label">Audio Sample Rate</span>
+                <span class="study-panel__stat-value mono">22,050 / 44,100 Hz</span>
+                <span class="study-panel__stat-note">Standard Nyquist frequency bandwidth: up to 11,025 Hz</span>
+            </div>
+
+            <!-- Zero Crossing Rate & RMS Energy -->
+            <div class="study-panel__stat-card">
+                <span class="study-panel__stat-label">Signal Transient Metrics</span>
+                <span class="study-panel__stat-value mono">ZCR + RMS</span>
+                <span class="study-panel__stat-note">Per-frame zero-crossing rate and root-mean-square energy</span>
+            </div>
+
+            <!-- MFCC Coefficients -->
+            <div class="study-panel__stat-card">
+                <span class="study-panel__stat-label">Spectral Timbre</span>
+                <span class="study-panel__stat-value mono">MFCC 1–20</span>
+                <span class="study-panel__stat-note">Mel-frequency cepstral coefficients capturing vocal and instrumental formant envelope</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Teaching Topics Section (§3.3 Item 3) -->
+    <section class="study-panel__section" id="section-pedagogy">
+        <div class="study-panel__section-title">Core Teaching Topics &amp; Instructional Concepts</div>
+        {% if teaching_guide and teaching_guide.topics %}
+            <ul class="study-panel__topics-list">
+                {% for topic in teaching_guide.topics %}
+                    <li class="study-panel__topic-item">
+                        <span class="study-panel__topic-icon" aria-hidden="true">&#x2713;</span>
+                        <span>{{ topic }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p style="color: var(--text-secondary); font-size: var(--fs-sm);">Standard conservatory curriculum concepts apply.</p>
+        {% endif %}
+    </section>
+
+    <!-- Structural Characteristics & History -->
+    <section class="study-panel__section" id="section-structure">
+        <div class="study-panel__section-title">Structure, Form &amp; History</div>
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="card" style="padding: 18px 20px;">
+                <h3 style="font-size: var(--fs-base); font-weight: 700; margin-bottom: 6px;">Structural Forms &amp; Conventions</h3>
+                <p style="color: var(--text-secondary); font-size: var(--fs-sm); line-height: 1.6;">
+                    {{ genre.typical_structures or "Standard verse-chorus or episodic developmental structures." }}
+                </p>
+            </div>
+
+            <div class="card" style="padding: 18px 20px;">
+                <h3 style="font-size: var(--fs-base); font-weight: 700; margin-bottom: 6px;">Historical Lineage &amp; Cultural Origins</h3>
+                <p style="color: var(--text-secondary); font-size: var(--fs-sm); line-height: 1.6;">
+                    {{ genre.history or "Evolved through cultural synthesis and regional performance traditions." }}
+                </p>
+            </div>
+
+            <!-- Core Instrumentation -->
+            <div class="card" style="padding: 18px 20px;">
+                <h3 style="font-size: var(--fs-base); font-weight: 700; margin-bottom: 8px;">Core Instrumentation</h3>
+                <div>
+                    {% if genre.common_instrumentation %}
+                        {% for inst in genre.common_instrumentation.split(',') %}
+                            <span class="instrument-tag">{{ inst.strip() }}</span>
+                        {% endfor %}
+                    {% else %}
+                        <span style="color: var(--text-muted); font-size: var(--fs-xs);">Standard acoustic/electric instrumentation.</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Subgenres List -->
+            {% if subgenres %}
+                <div class="card" style="padding: 18px 20px;">
+                    <h3 style="font-size: var(--fs-base); font-weight: 700; margin-bottom: 12px;">Subgenre Taxonomy ({{ subgenres|length }})</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px;">
+                        {% for sub in subgenres %}
+                            <div style="background: var(--bg-card-subtle); border: 1px solid var(--border-subtle); padding: 12px; border-radius: var(--radius-sm);">
+                                <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                                    <strong style="font-size: var(--fs-sm); color: var(--text-primary);">{{ sub.name }}</strong>
+                                    <span class="mono" style="font-size: var(--fs-xs); color: var(--text-muted);">{{ sub.slug }}</span>
+                                </div>
+                                <p style="font-size: var(--fs-xs); color: var(--text-secondary); margin-top: 4px; line-height: 1.4;">
+                                    {{ sub.description }}
+                                </p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Reference Examples & Comparison (§3.3 Item 4) -->
+    <section class="study-panel__section" id="section-examples">
+        <div class="study-panel__section-title">Comparative Analysis &amp; Reference Links</div>
+        <div class="card" style="padding: 18px 20px;">
+            <p style="font-size: var(--fs-sm); color: var(--text-secondary); margin-bottom: 14px;">
+                Listen to {{ genre.name }} in comparative perspective against adjacent musical traditions:
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                {% for og in other_genres %}
+                    <a href="/explore/compare/{{ genre.slug }}/{{ og.slug }}" class="btn btn-secondary" style="font-size: var(--fs-xs); padding: 6px 12px;">
+                        vs. {{ og.name }} &rarr;
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+</div>

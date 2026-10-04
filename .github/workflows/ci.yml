@@ -1,0 +1,135 @@
+name: CLASSIFY CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Code Quality & Linting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Linting Tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 black
+
+      - name: Lint with Flake8 (critical syntax and undefined names)
+        run: |
+          # Stop build if there are Python syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=venve,venv,.pytest_cache
+          # Exit-zero on style warnings
+          flake8 . --count --exit-zero --max-complexity=15 --max-line-length=127 --statistics --exclude=venve,venv,.pytest_cache
+
+      - name: Code formatting check with Black (advisory)
+        run: |
+          black --check --diff classify tests config.py app.py wsgi.py || true
+
+  test:
+    name: Pytest Suite & Regression (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Linux Audio Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libsndfile1 ffmpeg
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: Install Application Dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -r requirements.txt
+
+      - name: Run Pytest Test Suite
+        env:
+          FLASK_ENV: testing
+          SECRET_KEY: ci-test-secret-key-32chars-minimum!
+        run: |
+          pytest -v --durations=10
+
+  model-eval:
+    name: ML Model Artifact & Inference Verification
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Linux Audio Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libsndfile1 ffmpeg
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Application Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Verify Serialized Model Artifacts
+        run: |
+          python -c "
+          from classify.ml.inference import load_artifacts
+          model, scaler, genres, subgenres = load_artifacts()
+          print(f'Loaded model class: {type(model).__name__}')
+          print(f'Primary genres ({len(genres)}): {genres}')
+          print(f'Subgenre taxonomy count: {len(subgenres)}')
+          assert len(genres) >= 10, 'Expected at least 10 primary genres'
+          assert len(subgenres) >= 10, 'Expected at least 10 subgenre categories'
+          "
+
+      - name: Run Focused ML Accuracy & Deeper ML Tests
+        env:
+          FLASK_ENV: testing
+        run: |
+          pytest tests/test_ml_accuracy_phase0.py tests/test_deeper_ml_phase1.py -v
+
+  security-audit:
+    name: Security & Vulnerability Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Pip-Audit
+        run: |
+          python -m pip install --upgrade pip
+          pip install pip-audit
+
+      - name: Run Dependency Vulnerability Audit
+        run: |
+          pip-audit -r requirements.txt || true

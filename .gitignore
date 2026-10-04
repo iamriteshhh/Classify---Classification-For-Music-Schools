@@ -1,0 +1,38 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Virtual environments
+venve/
+venv/
+env/
+ENV/
+
+# Sensitive environment configuration
+.env
+!.env.example
+
+# Runtime user uploads (keep .gitkeep)
+uploads/*
+!uploads/.gitkeep
+
+# Large audio dataset binaries (manifest is tracked)
+datasets/raw/*
+datasets/processed/*
+!datasets/manifest.csv
+!datasets/raw/.gitkeep
+!datasets/processed/.gitkeep
+
+# SQLite database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Instance folder
+instance/
+
+# OS generated files
+*.DS_Store
+Thumbs.db

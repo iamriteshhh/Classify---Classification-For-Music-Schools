@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ error_code }} — {{ error_title }} — CLASSIFY</title>
+    {% include "partials/head.html" %}
+</head>
+<body>
+    <div class="app-container" style="max-width: 600px; margin: 80px auto; text-align: center;">
+        <div class="card" style="padding: 40px 30px;">
+            <div class="mono" style="font-size: 3rem; font-weight: 800; color: var(--text-primary); margin-bottom: 12px;">
+                {{ error_code }}
+            </div>
+            <h1 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 12px; color: var(--text-primary);">
+                {{ error_title }}
+            </h1>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 28px;">
+                {{ error_message }}
+            </p>
+            <div style="display: flex; gap: 12px; justify-content: center;">
+                <a href="/" class="btn btn-primary" style="text-decoration: none;">
+                    Return to Home
+                </a>
+                <a href="javascript:history.back()" class="btn btn-secondary" style="text-decoration: none;">
+                    Go Back
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

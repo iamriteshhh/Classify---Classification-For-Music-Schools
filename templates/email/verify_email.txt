@@ -1,0 +1,12 @@
+CLASSIFY - Verify Your Email Address
+
+Welcome to CLASSIFY!
+
+Please confirm that {{ user.email }} belongs to you by visiting the link below:
+
+{{ verify_url }}
+
+If you did not register for an account on CLASSIFY, please ignore this email.
+
+--
+CLASSIFY — Song Classification System for Music Schools

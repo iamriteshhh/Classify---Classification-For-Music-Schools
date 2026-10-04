@@ -1,0 +1,59 @@
+version: "3.8"
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: classify-web
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - SECRET_KEY=classify-docker-production-secret-key-32chars!
+      - DATABASE_URL=sqlite:////app/instance/classify.db
+      - UPLOAD_FOLDER=/app/uploads
+      - UPLOAD_QUOTA_MB=500
+      - RATELIMIT_STORAGE_URI=redis://redis:6379/1
+      - REDIS_URL=redis://redis:6379/0
+      - ALLOWED_AUDIO_EXTENSIONS=wav,mp3
+      - MAIL_SERVER=localhost
+      - MAIL_PORT=25
+      - MAIL_SUPPRESS_SEND=true
+    volumes:
+      - classify_uploads:/app/uploads
+      - classify_db:/app/instance
+      - ./model_artifacts:/app/model_artifacts:ro
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/healthz"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  redis:
+    image: redis:7-alpine
+    container_name: classify-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - classify_redis:/data
+    command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+volumes:
+  classify_uploads:
+    name: classify_uploads_data
+  classify_db:
+    name: classify_sqlite_data
+  classify_redis:
+    name: classify_redis_data
