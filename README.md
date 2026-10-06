@@ -1,3 +1,13 @@
+---
+title: Classify Music System
+emoji: 🎵
+colorFrom: indigo
+colorTo: purple
+sdk: docker
+app_port: 5000
+pinned: false
+---
+
 # CLASSIFY — Song Classification System for Music Schools
 
 **CLASSIFY** is a full-featured, machine learning-driven music classification and music-education web platform designed for music schools, conservatories, and collegiate music programs. It combines robust acoustic signal processing, trained classical machine learning classifiers, a data-driven musical taxonomy, real-time pedagogical feedback, and dedicated student and teacher workflows.

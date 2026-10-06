@@ -300,4 +300,8 @@ def create_app(config_name_or_class=None):
     if "analysis.uploaded_file" in app.view_functions and "uploaded_file" not in app.view_functions:
         app.add_url_rule("/uploads/<path:filename>", endpoint="uploaded_file", view_func=app.view_functions["analysis.uploaded_file"], methods=["GET"])
 
+    # Configure ProxyFix for reverse-proxy environments (Cloudflare, Render, Gunicorn, etc.)
+    from werkzeug.middleware.proxy_fix import ProxyFix
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
+
     return app
