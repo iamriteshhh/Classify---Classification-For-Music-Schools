@@ -1,5 +1,5 @@
 {
-  "golden_test_set_size": 28,
+  "golden_test_set_size": 34,
   "classes": [
     "Ambient",
     "Blues",
@@ -10,17 +10,18 @@
     "Jazz",
     "Metal",
     "Pop",
+    "R&B",
     "Reggae",
     "Rock"
   ],
   "old_single_window_metrics": {
-    "accuracy": 0.8214,
-    "macro_f1": 0.8398,
-    "macro_precision": 0.8636,
-    "macro_recall": 0.8636,
-    "ambient_prediction_rate": 0.1071,
-    "mean_ambient_probability": 0.0918,
-    "mean_latency_seconds": 0.5355,
+    "accuracy": 0.8235,
+    "macro_f1": 0.8634,
+    "macro_precision": 0.8861,
+    "macro_recall": 0.8889,
+    "ambient_prediction_rate": 0.0588,
+    "mean_ambient_probability": 0.0431,
+    "mean_latency_seconds": 2.6506,
     "confusion_matrix": [
       [
         2,
@@ -33,9 +34,25 @@
         0,
         0,
         0,
+        0,
         0
       ],
       [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
         0,
         2,
         0,
@@ -51,6 +68,7 @@
       [
         0,
         0,
+        0,
         2,
         0,
         0,
@@ -62,27 +80,15 @@
         0
       ],
       [
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
         1,
         0,
         0,
-        1,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
-      ],
-      [
-        0,
-        0,
-        0,
-        0,
-        2,
-        0,
-        1,
-        0,
         0,
         0,
         0
@@ -94,6 +100,7 @@
         0,
         0,
         2,
+        0,
         0,
         0,
         0,
@@ -107,7 +114,8 @@
         0,
         0,
         0,
-        2,
+        4,
+        0,
         0,
         0,
         0,
@@ -124,6 +132,7 @@
         2,
         0,
         0,
+        0,
         0
       ],
       [
@@ -133,6 +142,21 @@
         0,
         0,
         2,
+        1,
+        0,
+        2,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
         0,
         0,
         4,
@@ -149,10 +173,12 @@
         0,
         0,
         0,
+        0,
         2,
         0
       ],
       [
+        0,
         0,
         0,
         0,
@@ -168,9 +194,9 @@
     ],
     "per_class": {
       "Ambient": {
-        "precision": 0.6667,
+        "precision": 1.0,
         "recall": 1.0,
-        "f1_score": 0.8,
+        "f1_score": 1.0,
         "support": 2
       },
       "Blues": {
@@ -187,8 +213,8 @@
       },
       "Country": {
         "precision": 1.0,
-        "recall": 0.5,
-        "f1_score": 0.6667,
+        "recall": 1.0,
+        "f1_score": 1.0,
         "support": 2
       },
       "Disco": {
@@ -207,7 +233,7 @@
         "precision": 0.6667,
         "recall": 1.0,
         "f1_score": 0.8,
-        "support": 2
+        "support": 4
       },
       "Metal": {
         "precision": 1.0,
@@ -217,9 +243,15 @@
       },
       "Pop": {
         "precision": 1.0,
-        "recall": 0.6667,
-        "f1_score": 0.8,
+        "recall": 0.3333,
+        "f1_score": 0.5,
         "support": 6
+      },
+      "R&B": {
+        "precision": 0.8,
+        "recall": 1.0,
+        "f1_score": 0.8889,
+        "support": 4
       },
       "Reggae": {
         "precision": 0.6667,
@@ -236,13 +268,13 @@
     }
   },
   "new_multi_segment_metrics": {
-    "accuracy": 0.8571,
-    "macro_f1": 0.8697,
-    "macro_precision": 0.8939,
-    "macro_recall": 0.8788,
-    "ambient_prediction_rate": 0.1071,
-    "mean_ambient_probability": 0.0931,
-    "mean_latency_seconds": 1.1572,
+    "accuracy": 0.8235,
+    "macro_f1": 0.8639,
+    "macro_precision": 0.8889,
+    "macro_recall": 0.8889,
+    "ambient_prediction_rate": 0.0588,
+    "mean_ambient_probability": 0.0428,
+    "mean_latency_seconds": 6.2742,
     "confusion_matrix": [
       [
         2,
@@ -255,9 +287,25 @@
         0,
         0,
         0,
+        0,
         0
       ],
       [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
         0,
         2,
         0,
@@ -273,21 +321,9 @@
       [
         0,
         0,
+        0,
         2,
         0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
-      ],
-      [
-        1,
-        0,
-        0,
-        1,
         0,
         0,
         0,
@@ -302,66 +338,86 @@
         0,
         0,
         2,
-        0,
-        0,
-        0,
-        1,
-        0,
-        0
-      ],
-      [
-        0,
-        0,
-        0,
-        0,
-        0,
-        2,
-        0,
-        0,
-        0,
-        1,
-        0
-      ],
-      [
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        2,
-        0,
-        0,
-        0,
-        0
-      ],
-      [
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        2,
-        0,
-        0,
-        0
-      ],
-      [
-        0,
         0,
         0,
         0,
         0,
         1,
         0,
+        0
+      ],
+      [
         0,
-        5,
+        0,
+        0,
+        1,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
         0,
         0
       ],
       [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        0,
+        2,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0
+      ],
+      [
+        0,
         0,
         0,
         0,
@@ -375,6 +431,7 @@
         0
       ],
       [
+        0,
         0,
         0,
         0,
@@ -390,9 +447,9 @@
     ],
     "per_class": {
       "Ambient": {
-        "precision": 0.6667,
+        "precision": 1.0,
         "recall": 1.0,
-        "f1_score": 0.8,
+        "f1_score": 1.0,
         "support": 2
       },
       "Blues": {
@@ -408,9 +465,9 @@
         "support": 2
       },
       "Country": {
-        "precision": 1.0,
-        "recall": 0.5,
-        "f1_score": 0.6667,
+        "precision": 0.6667,
+        "recall": 1.0,
+        "f1_score": 0.8,
         "support": 2
       },
       "Disco": {
@@ -426,10 +483,10 @@
         "support": 3
       },
       "Jazz": {
-        "precision": 1.0,
+        "precision": 0.6667,
         "recall": 1.0,
-        "f1_score": 1.0,
-        "support": 2
+        "f1_score": 0.8,
+        "support": 4
       },
       "Metal": {
         "precision": 1.0,
@@ -438,15 +495,21 @@
         "support": 2
       },
       "Pop": {
-        "precision": 0.8333,
-        "recall": 0.8333,
-        "f1_score": 0.8333,
+        "precision": 1.0,
+        "recall": 0.3333,
+        "f1_score": 0.5,
         "support": 6
       },
-      "Reggae": {
+      "R&B": {
         "precision": 0.6667,
         "recall": 1.0,
         "f1_score": 0.8,
+        "support": 4
+      },
+      "Reggae": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
         "support": 2
       },
       "Rock": {
@@ -466,14 +529,14 @@
       "original_duration": 243.17,
       "old": {
         "predicted": "Jazz",
-        "confidence": 0.4264,
-        "latency_s": 2.3531,
+        "confidence": 0.403,
+        "latency_s": 7.0895,
         "analyzed_duration_s": 60.0
       },
       "new": {
-        "predicted": "Pop",
-        "confidence": 0.3273,
-        "latency_s": 1.2979,
+        "predicted": "R&B",
+        "confidence": 0.2307,
+        "latency_s": 7.1493,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 0.3701,
         "num_segments": 3
@@ -486,15 +549,15 @@
       "dataset_name": "Real Upload",
       "original_duration": 257.97,
       "old": {
-        "predicted": "Pop",
-        "confidence": 0.3988,
-        "latency_s": 0.8291,
+        "predicted": "Jazz",
+        "confidence": 0.5249,
+        "latency_s": 4.5397,
         "analyzed_duration_s": 60.0
       },
       "new": {
-        "predicted": "Pop",
-        "confidence": 0.512,
-        "latency_s": 1.2963,
+        "predicted": "Jazz",
+        "confidence": 0.3585,
+        "latency_s": 6.7954,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 0.3489,
         "num_segments": 3
@@ -507,15 +570,15 @@
       "dataset_name": "Real Upload",
       "original_duration": 258.44,
       "old": {
-        "predicted": "Pop",
-        "confidence": 0.2567,
-        "latency_s": 0.8289,
+        "predicted": "R&B",
+        "confidence": 0.5597,
+        "latency_s": 4.4518,
         "analyzed_duration_s": 60.0
       },
       "new": {
-        "predicted": "Pop",
-        "confidence": 0.5402,
-        "latency_s": 1.2813,
+        "predicted": "R&B",
+        "confidence": 0.3108,
+        "latency_s": 6.7873,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 0.3482,
         "num_segments": 3
@@ -529,14 +592,14 @@
       "original_duration": 169.92,
       "old": {
         "predicted": "Hip-Hop",
-        "confidence": 0.348,
-        "latency_s": 0.8569,
+        "confidence": 0.4531,
+        "latency_s": 4.5985,
         "analyzed_duration_s": 60.0
       },
       "new": {
-        "predicted": "Pop",
-        "confidence": 0.5914,
-        "latency_s": 1.3238,
+        "predicted": "Jazz",
+        "confidence": 0.3268,
+        "latency_s": 6.7085,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 0.5296,
         "num_segments": 3
@@ -550,14 +613,14 @@
       "original_duration": 228.9,
       "old": {
         "predicted": "Hip-Hop",
-        "confidence": 0.7089,
-        "latency_s": 0.8286,
+        "confidence": 0.8598,
+        "latency_s": 4.4625,
         "analyzed_duration_s": 60.0
       },
       "new": {
         "predicted": "Hip-Hop",
-        "confidence": 0.7669,
-        "latency_s": 1.3309,
+        "confidence": 0.9103,
+        "latency_s": 6.6322,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 0.3932,
         "num_segments": 3
@@ -571,14 +634,14 @@
       "original_duration": 132.98,
       "old": {
         "predicted": "Reggae",
-        "confidence": 0.4309,
-        "latency_s": 0.83,
+        "confidence": 0.2362,
+        "latency_s": 4.4723,
         "analyzed_duration_s": 60.0
       },
       "new": {
-        "predicted": "Reggae",
-        "confidence": 0.3672,
-        "latency_s": 1.2828,
+        "predicted": "Country",
+        "confidence": 0.2859,
+        "latency_s": 6.5967,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 0.6768,
         "num_segments": 3
@@ -592,14 +655,14 @@
       "original_duration": 30.0,
       "old": {
         "predicted": "Ambient",
-        "confidence": 0.9135,
-        "latency_s": 0.4162,
+        "confidence": 0.9073,
+        "latency_s": 2.2184,
         "analyzed_duration_s": 30.0
       },
       "new": {
         "predicted": "Ambient",
-        "confidence": 0.9116,
-        "latency_s": 1.2913,
+        "confidence": 0.9053,
+        "latency_s": 6.6418,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 1.0,
         "num_segments": 3
@@ -613,14 +676,14 @@
       "original_duration": 29.98,
       "old": {
         "predicted": "Ambient",
-        "confidence": 0.525,
-        "latency_s": 0.4241,
+        "confidence": 0.2801,
+        "latency_s": 2.2416,
         "analyzed_duration_s": 29.98
       },
       "new": {
         "predicted": "Ambient",
-        "confidence": 0.525,
-        "latency_s": 0.4254,
+        "confidence": 0.2801,
+        "latency_s": 2.1898,
         "analyzed_duration_s": 29.98,
         "coverage_ratio": 1.0,
         "num_segments": 1
@@ -634,14 +697,14 @@
       "original_duration": 30.01,
       "old": {
         "predicted": "Blues",
-        "confidence": 0.9215,
-        "latency_s": 0.4584,
+        "confidence": 0.9359,
+        "latency_s": 2.1153,
         "analyzed_duration_s": 30.01
       },
       "new": {
         "predicted": "Blues",
-        "confidence": 0.9255,
-        "latency_s": 1.1349,
+        "confidence": 0.9402,
+        "latency_s": 6.4411,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 1.0,
         "num_segments": 3
@@ -655,14 +718,14 @@
       "original_duration": 30.01,
       "old": {
         "predicted": "Blues",
-        "confidence": 0.9288,
-        "latency_s": 0.3767,
+        "confidence": 0.9434,
+        "latency_s": 2.2077,
         "analyzed_duration_s": 30.01
       },
       "new": {
         "predicted": "Blues",
-        "confidence": 0.9291,
-        "latency_s": 1.1376,
+        "confidence": 0.9447,
+        "latency_s": 6.4573,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 1.0,
         "num_segments": 3
@@ -676,14 +739,14 @@
       "original_duration": 30.01,
       "old": {
         "predicted": "Classical",
-        "confidence": 0.9319,
-        "latency_s": 0.3895,
+        "confidence": 0.9468,
+        "latency_s": 2.1052,
         "analyzed_duration_s": 30.01
       },
       "new": {
         "predicted": "Classical",
-        "confidence": 0.9302,
-        "latency_s": 1.1345,
+        "confidence": 0.9476,
+        "latency_s": 6.4281,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 1.0,
         "num_segments": 3
@@ -697,14 +760,14 @@
       "original_duration": 30.01,
       "old": {
         "predicted": "Classical",
-        "confidence": 0.969,
-        "latency_s": 0.386,
+        "confidence": 0.9685,
+        "latency_s": 2.1253,
         "analyzed_duration_s": 30.01
       },
       "new": {
         "predicted": "Classical",
-        "confidence": 0.969,
-        "latency_s": 1.1448,
+        "confidence": 0.9686,
+        "latency_s": 6.2827,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 1.0,
         "num_segments": 3
@@ -717,15 +780,15 @@
       "dataset_name": "GTZAN",
       "original_duration": 30.01,
       "old": {
-        "predicted": "Ambient",
-        "confidence": 0.4973,
-        "latency_s": 0.3718,
+        "predicted": "Country",
+        "confidence": 0.7436,
+        "latency_s": 2.1336,
         "analyzed_duration_s": 30.01
       },
       "new": {
-        "predicted": "Ambient",
-        "confidence": 0.4918,
-        "latency_s": 1.1488,
+        "predicted": "Country",
+        "confidence": 0.7478,
+        "latency_s": 6.4397,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 1.0,
         "num_segments": 3
@@ -739,14 +802,14 @@
       "original_duration": 30.01,
       "old": {
         "predicted": "Country",
-        "confidence": 0.3483,
-        "latency_s": 0.3721,
+        "confidence": 0.7762,
+        "latency_s": 2.0755,
         "analyzed_duration_s": 30.01
       },
       "new": {
         "predicted": "Country",
-        "confidence": 0.3444,
-        "latency_s": 1.135,
+        "confidence": 0.7754,
+        "latency_s": 6.3242,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 1.0,
         "num_segments": 3
@@ -760,14 +823,14 @@
       "original_duration": 30.21,
       "old": {
         "predicted": "Disco",
-        "confidence": 0.8644,
-        "latency_s": 0.3765,
+        "confidence": 0.8822,
+        "latency_s": 2.115,
         "analyzed_duration_s": 30.21
       },
       "new": {
         "predicted": "Disco",
-        "confidence": 0.8657,
-        "latency_s": 1.1615,
+        "confidence": 0.8164,
+        "latency_s": 6.3874,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 1.0,
         "num_segments": 3
@@ -781,14 +844,14 @@
       "original_duration": 30.01,
       "old": {
         "predicted": "Disco",
-        "confidence": 0.7458,
-        "latency_s": 0.3801,
+        "confidence": 0.7339,
+        "latency_s": 2.1385,
         "analyzed_duration_s": 30.01
       },
       "new": {
         "predicted": "Disco",
-        "confidence": 0.7455,
-        "latency_s": 1.1163,
+        "confidence": 0.7397,
+        "latency_s": 6.4176,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 1.0,
         "num_segments": 3
@@ -802,14 +865,14 @@
       "original_duration": 30.0,
       "old": {
         "predicted": "Hip-Hop",
-        "confidence": 0.6004,
-        "latency_s": 0.3764,
+        "confidence": 0.7774,
+        "latency_s": 2.1132,
         "analyzed_duration_s": 30.0
       },
       "new": {
         "predicted": "Hip-Hop",
-        "confidence": 0.5993,
-        "latency_s": 1.1441,
+        "confidence": 0.7764,
+        "latency_s": 6.4133,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 1.0,
         "num_segments": 3
@@ -823,14 +886,14 @@
       "original_duration": 30.37,
       "old": {
         "predicted": "Hip-Hop",
-        "confidence": 0.8079,
-        "latency_s": 0.3834,
+        "confidence": 0.8572,
+        "latency_s": 2.1651,
         "analyzed_duration_s": 30.37
       },
       "new": {
         "predicted": "Hip-Hop",
-        "confidence": 0.8078,
-        "latency_s": 1.1379,
+        "confidence": 0.8291,
+        "latency_s": 6.4202,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 1.0,
         "num_segments": 3
@@ -844,14 +907,14 @@
       "original_duration": 30.01,
       "old": {
         "predicted": "Jazz",
-        "confidence": 0.8728,
-        "latency_s": 0.383,
+        "confidence": 0.7569,
+        "latency_s": 2.1474,
         "analyzed_duration_s": 30.01
       },
       "new": {
         "predicted": "Jazz",
-        "confidence": 0.8729,
-        "latency_s": 1.1308,
+        "confidence": 0.7564,
+        "latency_s": 6.2826,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 1.0,
         "num_segments": 3
@@ -865,14 +928,14 @@
       "original_duration": 30.01,
       "old": {
         "predicted": "Jazz",
-        "confidence": 0.9294,
-        "latency_s": 0.3767,
+        "confidence": 0.7802,
+        "latency_s": 2.1407,
         "analyzed_duration_s": 30.01
       },
       "new": {
         "predicted": "Jazz",
-        "confidence": 0.9296,
-        "latency_s": 1.119,
+        "confidence": 0.7801,
+        "latency_s": 6.4856,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 1.0,
         "num_segments": 3
@@ -886,14 +949,14 @@
       "original_duration": 30.0,
       "old": {
         "predicted": "Metal",
-        "confidence": 0.9777,
-        "latency_s": 0.3736,
+        "confidence": 0.9778,
+        "latency_s": 2.1793,
         "analyzed_duration_s": 30.0
       },
       "new": {
         "predicted": "Metal",
-        "confidence": 0.9779,
-        "latency_s": 1.1296,
+        "confidence": 0.9784,
+        "latency_s": 6.4878,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 1.0,
         "num_segments": 3
@@ -907,14 +970,14 @@
       "original_duration": 30.0,
       "old": {
         "predicted": "Metal",
-        "confidence": 0.9369,
-        "latency_s": 0.3838,
+        "confidence": 0.9307,
+        "latency_s": 2.175,
         "analyzed_duration_s": 30.0
       },
       "new": {
         "predicted": "Metal",
-        "confidence": 0.938,
-        "latency_s": 1.2014,
+        "confidence": 0.9315,
+        "latency_s": 6.6092,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 1.0,
         "num_segments": 3
@@ -928,14 +991,14 @@
       "original_duration": 30.0,
       "old": {
         "predicted": "Pop",
-        "confidence": 0.9861,
-        "latency_s": 0.3773,
+        "confidence": 0.9182,
+        "latency_s": 2.1813,
         "analyzed_duration_s": 30.0
       },
       "new": {
         "predicted": "Pop",
-        "confidence": 0.9861,
-        "latency_s": 1.1344,
+        "confidence": 0.9177,
+        "latency_s": 6.5802,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 1.0,
         "num_segments": 3
@@ -949,14 +1012,14 @@
       "original_duration": 30.0,
       "old": {
         "predicted": "Pop",
-        "confidence": 0.9025,
-        "latency_s": 0.3768,
+        "confidence": 0.7581,
+        "latency_s": 2.1308,
         "analyzed_duration_s": 30.0
       },
       "new": {
         "predicted": "Pop",
-        "confidence": 0.9032,
-        "latency_s": 1.1357,
+        "confidence": 0.7579,
+        "latency_s": 6.3331,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 1.0,
         "num_segments": 3
@@ -970,14 +1033,14 @@
       "original_duration": 30.01,
       "old": {
         "predicted": "Reggae",
-        "confidence": 0.8771,
-        "latency_s": 0.3761,
+        "confidence": 0.9249,
+        "latency_s": 2.1594,
         "analyzed_duration_s": 30.01
       },
       "new": {
         "predicted": "Reggae",
-        "confidence": 0.878,
-        "latency_s": 1.1934,
+        "confidence": 0.9249,
+        "latency_s": 6.6018,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 1.0,
         "num_segments": 3
@@ -991,14 +1054,14 @@
       "original_duration": 30.01,
       "old": {
         "predicted": "Reggae",
-        "confidence": 0.8611,
-        "latency_s": 0.3694,
+        "confidence": 0.7682,
+        "latency_s": 2.1902,
         "analyzed_duration_s": 30.01
       },
       "new": {
         "predicted": "Reggae",
-        "confidence": 0.8593,
-        "latency_s": 1.1094,
+        "confidence": 0.8327,
+        "latency_s": 6.4159,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 1.0,
         "num_segments": 3
@@ -1012,14 +1075,14 @@
       "original_duration": 30.01,
       "old": {
         "predicted": "Rock",
-        "confidence": 0.8104,
-        "latency_s": 0.3697,
+        "confidence": 0.8052,
+        "latency_s": 2.2294,
         "analyzed_duration_s": 30.01
       },
       "new": {
         "predicted": "Rock",
-        "confidence": 0.8133,
-        "latency_s": 1.2064,
+        "confidence": 0.8084,
+        "latency_s": 6.444,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 1.0,
         "num_segments": 3
@@ -1033,14 +1096,140 @@
       "original_duration": 30.01,
       "old": {
         "predicted": "Rock",
-        "confidence": 0.7956,
-        "latency_s": 0.3693,
+        "confidence": 0.7324,
+        "latency_s": 2.1199,
         "analyzed_duration_s": 30.01
       },
       "new": {
         "predicted": "Rock",
-        "confidence": 0.7872,
-        "latency_s": 1.1155,
+        "confidence": 0.7085,
+        "latency_s": 6.5304,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 1.0,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "fma_rnb_000241",
+      "filename": "fma_rnb_000241.mp3",
+      "true_genre": "R&B",
+      "dataset_name": "Free Music Archive (FMA)",
+      "original_duration": 30.0,
+      "old": {
+        "predicted": "R&B",
+        "confidence": 0.7256,
+        "latency_s": 2.2317,
+        "analyzed_duration_s": 30.0
+      },
+      "new": {
+        "predicted": "R&B",
+        "confidence": 0.7335,
+        "latency_s": 6.5315,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 1.0,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "fma_rnb_000358",
+      "filename": "fma_rnb_000358.mp3",
+      "true_genre": "R&B",
+      "dataset_name": "Free Music Archive (FMA)",
+      "original_duration": 29.98,
+      "old": {
+        "predicted": "R&B",
+        "confidence": 0.6788,
+        "latency_s": 2.1875,
+        "analyzed_duration_s": 29.98
+      },
+      "new": {
+        "predicted": "R&B",
+        "confidence": 0.6789,
+        "latency_s": 2.2472,
+        "analyzed_duration_s": 29.98,
+        "coverage_ratio": 1.0,
+        "num_segments": 1
+      }
+    },
+    {
+      "track_id": "fma_rnb_000442",
+      "filename": "fma_rnb_000442.mp3",
+      "true_genre": "R&B",
+      "dataset_name": "Free Music Archive (FMA)",
+      "original_duration": 30.0,
+      "old": {
+        "predicted": "R&B",
+        "confidence": 0.6087,
+        "latency_s": 2.2008,
+        "analyzed_duration_s": 30.0
+      },
+      "new": {
+        "predicted": "R&B",
+        "confidence": 0.6081,
+        "latency_s": 6.6824,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 1.0,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "fma_rnb_001111",
+      "filename": "fma_rnb_001111.mp3",
+      "true_genre": "R&B",
+      "dataset_name": "Free Music Archive (FMA)",
+      "original_duration": 30.0,
+      "old": {
+        "predicted": "R&B",
+        "confidence": 0.8924,
+        "latency_s": 2.24,
+        "analyzed_duration_s": 30.0
+      },
+      "new": {
+        "predicted": "R&B",
+        "confidence": 0.8934,
+        "latency_s": 6.7039,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 1.0,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "gtzan_jazz_00011",
+      "filename": "gtzan_jazz_jazz.00011.wav",
+      "true_genre": "Jazz",
+      "dataset_name": "GTZAN",
+      "original_duration": 30.01,
+      "old": {
+        "predicted": "Jazz",
+        "confidence": 0.9589,
+        "latency_s": 2.13,
+        "analyzed_duration_s": 30.01
+      },
+      "new": {
+        "predicted": "Jazz",
+        "confidence": 0.9578,
+        "latency_s": 6.4876,
+        "analyzed_duration_s": 90.0,
+        "coverage_ratio": 1.0,
+        "num_segments": 3
+      }
+    },
+    {
+      "track_id": "gtzan_jazz_00012",
+      "filename": "gtzan_jazz_jazz.00012.wav",
+      "true_genre": "Jazz",
+      "dataset_name": "GTZAN",
+      "original_duration": 30.01,
+      "old": {
+        "predicted": "Jazz",
+        "confidence": 0.8362,
+        "latency_s": 2.1074,
+        "analyzed_duration_s": 30.01
+      },
+      "new": {
+        "predicted": "Jazz",
+        "confidence": 0.8492,
+        "latency_s": 6.3877,
         "analyzed_duration_s": 90.0,
         "coverage_ratio": 1.0,
         "num_segments": 3

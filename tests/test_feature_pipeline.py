@@ -23,7 +23,7 @@ def test_feature_pipeline_vector_from_audio(create_synthetic_audio):
     assert isinstance(vec, np.ndarray)
     assert vec.ndim == 1
     assert len(vec) == len(FEATURE_NAMES)
-    assert len(vec) == 89
+    assert len(vec) == 108
     assert np.all(np.isfinite(vec))
     assert names == FEATURE_NAMES
 
@@ -36,7 +36,7 @@ def test_feature_pipeline_vector_from_dict(create_synthetic_audio):
     vec, names = extract_feature_vector(features_dict)
 
     assert isinstance(vec, np.ndarray)
-    assert len(vec) == 89
+    assert len(vec) == 108
     assert np.all(np.isfinite(vec))
 
 

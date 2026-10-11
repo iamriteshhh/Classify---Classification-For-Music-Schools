@@ -10,7 +10,7 @@ Part of Phase 3 for CLASSIFY.
 import numpy as np
 from classify.audio.audio_processing import analyze_audio
 
-# Standardized list of feature names (89 features total)
+# Standardized list of feature names (108 features total)
 FEATURE_NAMES = (
     ["tempo", "rms_mean", "rms_var", "zcr_mean", "zcr_var"]
     + [
@@ -35,12 +35,25 @@ FEATURE_NAMES = (
         "mel_spectrogram_mean",
         "mel_spectrogram_var",
     ]
+    + [
+        "harmonic_ratio",
+        "spectral_flatness_mean",
+        "spectral_flatness_var",
+    ]
+    + [f"tonnetz_mean_{i}" for i in range(6)]
+    + [f"tonnetz_var_{i}" for i in range(6)]
+    + [
+        "dynamic_range",
+        "tempo_stability",
+        "bass_spectral_centroid",
+        "vocal_probability",
+    ]
 )
 
 
 def extract_feature_vector(audio_source, use_segmentation=True):
     """
-    Extracts a standardized 1D 89-feature vector from either an audio file path or
+    Extracts a standardized 1D 108-feature vector from either an audio file path or
     an existing technical_features dictionary.
 
     When given a file path, applies multi-window audio segmentation (Phase 3)
@@ -51,7 +64,7 @@ def extract_feature_vector(audio_source, use_segmentation=True):
         use_segmentation (bool): Whether to apply multi-window segmentation when audio_source is a path.
 
     Returns:
-        tuple: (np.ndarray of shape (89,), list of feature names)
+        tuple: (np.ndarray of shape (108,), list of feature names)
     """
     if isinstance(audio_source, str):
         if use_segmentation:
@@ -117,6 +130,24 @@ def extract_feature_vector(audio_source, use_segmentation=True):
     vector.append(float(features.get("mel_spectrogram_mean", 0.0)))
     # Task 0.4: Revived natural computation (protected by LUFS normalization)
     vector.append(float(features.get("mel_spectrogram_var", 0.0)))
+
+    # 9. Harmonic & Tonal Descriptors (Phase 1 Expansion - 19 features)
+    vector.append(float(features.get("harmonic_ratio", 0.5)))
+    vector.append(float(features.get("spectral_flatness_mean", 0.0)))
+    vector.append(float(features.get("spectral_flatness_var", 0.0)))
+
+    tonnetz_means = features.get("tonnetz_means", [0.0] * 6)
+    for i in range(6):
+        vector.append(float(tonnetz_means[i]) if i < len(tonnetz_means) else 0.0)
+
+    tonnetz_vars = features.get("tonnetz_vars", [0.0] * 6)
+    for i in range(6):
+        vector.append(float(tonnetz_vars[i]) if i < len(tonnetz_vars) else 0.0)
+
+    vector.append(float(features.get("dynamic_range", 0.0)))
+    vector.append(float(features.get("tempo_stability", 0.0)))
+    vector.append(float(features.get("bass_spectral_centroid", 0.0)))
+    vector.append(float(features.get("vocal_probability", 0.0)))
 
     vector_np = np.array(vector, dtype=np.float32)
     return vector_np, FEATURE_NAMES

@@ -191,6 +191,9 @@ def retrain_from_reviews(
     label_encoder_path = os.path.join(target_artifacts, "label_encoder.joblib")
     if os.path.exists(label_encoder_path):
         le: LabelEncoder = joblib.load(label_encoder_path)
+        if not set(y_base).issubset(set(le.classes_)):
+            le = LabelEncoder()
+            le.fit(np.unique(np.concatenate([y_base, getattr(le, 'classes_', [])])))
     else:
         le = LabelEncoder()
         le.fit(y_base)
@@ -216,14 +219,15 @@ def retrain_from_reviews(
     sample_weights = np.concatenate([weights_base, weights_corr])
 
     # Fit feature scaling and selection pipeline
+    k_features = min(100, X_combined.shape[1])
     scaler_pipeline = Pipeline([
         ("power_transform", PowerTransformer(method="yeo-johnson")),
-        ("select_k_best", SelectKBest(f_classif, k=86)),
+        ("select_k_best", SelectKBest(f_classif, k=k_features)),
     ])
     X_scaled = scaler_pipeline.fit_transform(X_combined, y_combined)
 
     # Train updated SVM model
-    new_model = SVC(C=5.0, kernel="rbf", gamma=0.007, probability=True, random_state=42)
+    new_model = SVC(C=6.0, kernel="rbf", gamma=0.007, probability=True, random_state=42)
     new_model.fit(X_scaled, y_combined, sample_weight=sample_weights)
 
     # Evaluate existing model on golden set as baseline

@@ -12,7 +12,7 @@ import json
 import os
 import sys
 import time
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 import numpy as np
 
 # Ensure root workspace is on path
@@ -56,12 +56,18 @@ def run_old_single_window_inference(file_path: str, model, scaler, encoder) -> D
     }
 
 
-def evaluate_golden_dataset(manifest_path: str = GOLDEN_MANIFEST) -> Dict[str, Any]:
+def evaluate_golden_dataset(
+    manifest_path: str = GOLDEN_MANIFEST,
+    artifacts_dir: Optional[str] = None,
+) -> Dict[str, Any]:
     """Runs comparative evaluation across the Golden Test Set."""
     if not os.path.exists(manifest_path):
         raise FileNotFoundError(f"Golden manifest not found: {manifest_path}")
 
-    artifacts = load_artifacts()
+    target_dir = artifacts_dir or os.path.join(BASE_DIR, "model_artifacts")
+    output_report = os.path.join(target_dir, "golden_set_evaluation.json")
+
+    artifacts = load_artifacts(target_dir)
     model = artifacts["model"]
     scaler = artifacts["scaler"]
     encoder = artifacts["encoder"]
@@ -106,7 +112,7 @@ def evaluate_golden_dataset(manifest_path: str = GOLDEN_MANIFEST) -> Dict[str, A
 
         # 2. Run New Inference
         t_start = time.perf_counter()
-        res_new = predict_genre(abs_path)
+        res_new = predict_genre(abs_path, artifacts_dir=target_dir)
         t_new = time.perf_counter() - t_start
         new_pred = res_new["predicted_genre"]
         new_conf = res_new["confidence"]
@@ -184,8 +190,8 @@ def evaluate_golden_dataset(manifest_path: str = GOLDEN_MANIFEST) -> Dict[str, A
         "track_comparisons": track_results,
     }
 
-    os.makedirs(os.path.dirname(OUTPUT_REPORT), exist_ok=True)
-    with open(OUTPUT_REPORT, mode="w", encoding="utf-8") as f:
+    os.makedirs(os.path.dirname(output_report), exist_ok=True)
+    with open(output_report, mode="w", encoding="utf-8") as f:
         json.dump(report, f, indent=2)
 
     print("\n-------------------------------------------------------")
@@ -200,10 +206,14 @@ def evaluate_golden_dataset(manifest_path: str = GOLDEN_MANIFEST) -> Dict[str, A
     print(f"   Ambient Rate:    {new_ambient_collapse_count}/{n_total} ({new_ambient_collapse_count/n_total*100:.1f}%)")
     print(f"   Mean Latency:    {np.mean(new_latencies):.2f}s")
     print("-------------------------------------------------------")
-    print(f"Report saved to: {OUTPUT_REPORT}\n")
+    print(f"Report saved to: {output_report}\n")
 
     return report
 
 
 if __name__ == "__main__":
-    evaluate_golden_dataset()
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--artifacts-dir", default=None, help="Path to artifacts directory")
+    args = parser.parse_args()
+    evaluate_golden_dataset(artifacts_dir=args.artifacts_dir)

@@ -58,15 +58,15 @@ def test_segment_windows_long_audio():
 
 
 def test_segmented_features_vector_contract_and_determinism(create_synthetic_audio):
-    """Verifies that segmented extraction returns an 89-length vector and is deterministic."""
+    """Verifies that segmented extraction returns an 108-length vector and is deterministic."""
     audio_path = create_synthetic_audio(duration=4.0, sr=22050, freq=440.0)
 
     vec1, names1, segs1 = extract_segmented_features(audio_path, num_segments=3)
     vec2, names2, segs2 = extract_segmented_features(audio_path, num_segments=3)
 
     assert isinstance(vec1, np.ndarray)
-    assert vec1.shape == (89,)
-    assert len(names1) == 89
+    assert vec1.shape == (108,)
+    assert len(names1) == 108
     assert names1 == FEATURE_NAMES
 
     # Determinism
@@ -74,13 +74,13 @@ def test_segmented_features_vector_contract_and_determinism(create_synthetic_aud
 
 
 def test_segmented_features_median_vs_mean(create_synthetic_audio):
-    """Verifies both mean and median aggregations produce valid 89-dim vectors."""
+    """Verifies both mean and median aggregations produce valid 108-dim vectors."""
     audio_path = create_synthetic_audio(duration=6.0, sr=22050, freq=330.0)
 
     vec_mean, _, _ = extract_segmented_features(audio_path, aggregation="mean")
     vec_median, _, _ = extract_segmented_features(audio_path, aggregation="median")
 
-    assert vec_mean.shape == (89,)
-    assert vec_median.shape == (89,)
+    assert vec_mean.shape == (108,)
+    assert vec_median.shape == (108,)
     assert not np.isnan(vec_mean).any()
     assert not np.isnan(vec_median).any()

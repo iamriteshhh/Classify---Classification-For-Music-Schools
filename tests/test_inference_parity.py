@@ -100,8 +100,8 @@ class TestTrainingInferenceParity:
     """Requirement 7.2: Verify strict invariant parity between train and inference pipelines."""
 
     def test_shared_feature_pipeline_and_names(self):
-        """Asserts identical feature dimension (89) and feature names list."""
-        assert len(FEATURE_NAMES) == 89
+        """Asserts identical feature dimension (108) and feature names list."""
+        assert len(FEATURE_NAMES) == 108
         assert FEATURE_NAMES[0] == "tempo"
         assert FEATURE_NAMES[1] == "rms_mean"
         assert "mel_spectrogram_var" in FEATURE_NAMES
@@ -114,8 +114,9 @@ class TestTrainingInferenceParity:
         encoder = artifacts["encoder"]
 
         assert hasattr(scaler, "transform")
-        assert scaler.n_features_in_ == 89, "Fitted scaler must expect exactly 89 features"
-        assert len(encoder.classes_) == 11, "Model must support exactly 11 genres"
+        assert scaler.n_features_in_ == 108, "Fitted scaler must expect exactly 108 features"
+        assert len(encoder.classes_) == 12, "Model must support exactly 12 genres"
+        assert "R&B" in encoder.classes_, "R&B must be present in trained model classes"
         assert hasattr(model, "predict_proba"), "HistGradientBoosting must support predict_proba"
 
     def test_sample_rate_and_mono_invariance(self, multi_minute_wav):

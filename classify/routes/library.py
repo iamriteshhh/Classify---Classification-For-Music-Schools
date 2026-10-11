@@ -27,6 +27,7 @@ ACOUSTIC_PROFILES = {
     "hip-hop": {"bpm_range": "75 – 100 BPM", "brightness": "Deep Lows + Crisp Highs (1200–3200 Hz)", "energy": "High-Medium", "dynamics": "Sub-bass 808 foundation with sharp snare transients"},
     "disco": {"bpm_range": "115 – 130 BPM", "brightness": "Bright (2400–4000 Hz)", "energy": "Very High", "dynamics": "Four-on-the-floor kick drive with continuous syncopated groove"},
     "reggae": {"bpm_range": "65 – 90 BPM", "brightness": "Warm Lows (1000–2200 Hz)", "energy": "Medium-Low", "dynamics": "Heavy sub-bass with off-beat rim shots and chop chords"},
+    "rnb": {"bpm_range": "65 – 110 BPM", "brightness": "Warm-Lush (1200–3000 Hz)", "energy": "Medium-Low", "dynamics": "Deep 808/synth-bass groove with silky vocal presence and Rhodes warmth"},
 }
 
 

@@ -6,6 +6,7 @@ for audio analysis submissions using ReportLab.
 
 from __future__ import annotations
 
+import html
 import io
 from datetime import datetime, timezone
 from typing import Any
@@ -21,6 +22,13 @@ from reportlab.platypus import (
     Table,
     TableStyle,
 )
+
+
+def safe_escape(val: Any) -> str:
+    """Safely escapes HTML/XML entities, handling None and non-string values."""
+    if val is None:
+        return ""
+    return html.escape(str(val))
 
 
 def generate_analysis_pdf(analysis: Any) -> io.BytesIO:
@@ -95,8 +103,8 @@ def generate_analysis_pdf(analysis: Any) -> io.BytesIO:
     duration = f"{song.duration:.2f} s" if (song and song.duration) else "N/A"
 
     meta_data = [
-        [Paragraph("<b>Track Title:</b>", body_style), Paragraph(track_title, body_style),
-         Paragraph("<b>Student:</b>", body_style), Paragraph(student_email, body_style)],
+        [Paragraph("<b>Track Title:</b>", body_style), Paragraph(safe_escape(track_title), body_style),
+         Paragraph("<b>Student:</b>", body_style), Paragraph(safe_escape(student_email), body_style)],
         [Paragraph("<b>Recorded At:</b>", body_style), Paragraph(analysis.analyzed_at.strftime('%Y-%m-%d %H:%M'), body_style),
          Paragraph("<b>Duration:</b>", body_style), Paragraph(duration, body_style)],
     ]
@@ -115,12 +123,12 @@ def generate_analysis_pdf(analysis: Any) -> io.BytesIO:
     genre_name = pred.genre.name if (pred and pred.genre) else "Unknown"
     subgenre_name = pred.subgenre.name if (pred and pred.subgenre) else "None"
     conf_pct = f"{pred.confidence * 100:.1f}%" if pred else "N/A"
-    explanation = pred.explanation if pred else "No model explanation available."
+    explanation = pred.explanation if (pred and pred.explanation) else "No model explanation available."
 
     story.append(Paragraph("Machine Learning Genre Prediction", section_style))
     ml_data = [
-        [Paragraph("<b>Primary Genre:</b>", body_style), Paragraph(f"<b>{genre_name}</b>", body_style),
-         Paragraph("<b>Subgenre:</b>", body_style), Paragraph(subgenre_name, body_style)],
+        [Paragraph("<b>Primary Genre:</b>", body_style), Paragraph(f"<b>{safe_escape(genre_name)}</b>", body_style),
+         Paragraph("<b>Subgenre:</b>", body_style), Paragraph(safe_escape(subgenre_name), body_style)],
         [Paragraph("<b>Confidence:</b>", body_style), Paragraph(conf_pct, body_style),
          Paragraph("<b>Model Architecture:</b>", body_style), Paragraph("Trained Classical ML Classifier", body_style)],
     ]
@@ -134,7 +142,7 @@ def generate_analysis_pdf(analysis: Any) -> io.BytesIO:
     story.append(ml_table)
     story.append(Spacer(1, 6))
 
-    exp_para = Paragraph(f"<b>Acoustic Rationale:</b> {explanation}", body_style)
+    exp_para = Paragraph(f"<b>Acoustic Rationale:</b> {safe_escape(explanation)}", body_style)
     story.append(exp_para)
     story.append(Spacer(1, 14))
 
@@ -183,7 +191,7 @@ def generate_analysis_pdf(analysis: Any) -> io.BytesIO:
         status_text = "Agreed with Model" if review.agrees_with_model else f"Corrected to {review.teacher_genre}"
         reviewed_at_str = review.reviewed_at.strftime('%Y-%m-%d %H:%M') if review.reviewed_at else "Recorded"
         rev_data = [
-            [Paragraph("<b>Instructor Assessment:</b>", body_style), Paragraph(status_text, body_style),
+            [Paragraph("<b>Instructor Assessment:</b>", body_style), Paragraph(safe_escape(status_text), body_style),
              Paragraph("<b>Review Date:</b>", body_style), Paragraph(reviewed_at_str, body_style)],
         ]
         rev_table = Table(rev_data, colWidths=[120, 140, 90, 170])
@@ -196,7 +204,7 @@ def generate_analysis_pdf(analysis: Any) -> io.BytesIO:
         story.append(rev_table)
         story.append(Spacer(1, 6))
         comment_text = review.comment or "No written comments recorded."
-        story.append(Paragraph(f"<b>Instructor Notes:</b> {comment_text}", body_style))
+        story.append(Paragraph(f"<b>Instructor Notes:</b> {safe_escape(comment_text)}", body_style))
     else:
         story.append(Paragraph("<i>This submission has not yet received an instructor pedagogical review.</i>", body_style))
 

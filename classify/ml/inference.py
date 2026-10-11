@@ -29,8 +29,12 @@ _MODEL_CACHE = {
 }
 
 
+_CURRENT_ARTIFACTS_DIR = None
+
+
 def load_artifacts(artifacts_dir=None):
     """Loads serialized model, scaler, and label encoder once into memory."""
+    global _CURRENT_ARTIFACTS_DIR
     target_dir = artifacts_dir or ARTIFACTS_DIR
     model_path = os.path.join(target_dir, "genre_classifier.joblib")
     scaler_path = os.path.join(target_dir, "scaler.joblib")
@@ -45,8 +49,86 @@ def load_artifacts(artifacts_dir=None):
     _MODEL_CACHE["model"] = joblib.load(model_path)
     _MODEL_CACHE["scaler"] = joblib.load(scaler_path)
     _MODEL_CACHE["encoder"] = joblib.load(encoder_path)
+    _CURRENT_ARTIFACTS_DIR = target_dir
 
     return _MODEL_CACHE
+
+
+def apply_confusion_guards(
+    prob_dict: dict,
+    feature_vector: np.ndarray,
+    feature_names: list,
+) -> dict:
+    """
+    Phase 5: Post-prediction acoustic arbitration for borderline/confused genres.
+    Arbitrates specific historical dataset attractor sinks (e.g., GTZAN Pop/Country sinks
+    swallowing R&B and Jazz, or fast Disco tracks being misdirected into R&B).
+
+    Operates strictly when genres are within close competition or top confidence is < 0.55.
+    Returns calibrated prob_dict that sums to 1.0.
+    """
+    if not prob_dict or feature_vector is None or len(feature_vector) == 0:
+        return prob_dict
+
+    probs = dict(prob_dict)
+    fmap = {k: float(v) for k, v in zip(feature_names, feature_vector)}
+
+    tempo = fmap.get("tempo", 120.0)
+    harmonic_ratio = fmap.get("harmonic_ratio", 0.5)
+    onset_rate = fmap.get("onset_rate", 2.5)
+    vocal_prob = fmap.get("vocal_probability", 0.3)
+    dynamic_range = fmap.get("dynamic_range", 0.05)
+    tempo_stability = fmap.get("tempo_stability", 0.03)
+    bass_sc = fmap.get("bass_spectral_centroid", 150.0)
+    flatness_mean = fmap.get("spectral_flatness_mean", 0.01)
+
+    # Sum of 6 Tonnetz variances (harmonic modulation across 5ths and 3rds)
+    tonnetz_vars_sum = sum(fmap.get(f"tonnetz_var_{i}", 0.0) for i in range(6))
+
+    rnb_p = probs.get("R&B", 0.0)
+    disco_p = probs.get("Disco", 0.0)
+    pop_p = probs.get("Pop", 0.0)
+    country_p = probs.get("Country", 0.0)
+    jazz_p = probs.get("Jazz", 0.0)
+
+    # 1A: False R&B -> True Disco (Fast 4-on-the-floor tempo, low harmonic ratio, punchy percussive onsets)
+    if rnb_p > 0.20 and tempo >= 114.0 and onset_rate >= 3.0 and harmonic_ratio < 0.48:
+        shift = min(rnb_p * 0.40, 0.18)
+        probs["Disco"] = disco_p + shift
+        probs["R&B"] = max(0.0, rnb_p - shift)
+
+    # 1B: True R&B misclassified as Pop or Country (Smooth vocal intimacy, warm sub-bass, lush harmony)
+    elif (pop_p > rnb_p or country_p > rnb_p) and rnb_p >= 0.15:
+        if vocal_prob >= 0.40 and harmonic_ratio >= 0.50 and bass_sc < 195.0 and flatness_mean < 0.04:
+            boost = 0.18
+            if pop_p > rnb_p and country_p > rnb_p:
+                probs["Pop"] = max(0.0, pop_p - 0.10)
+                probs["Country"] = max(0.0, country_p - 0.08)
+                probs["R&B"] = rnb_p + 0.18
+            elif pop_p > rnb_p:
+                probs["Pop"] = max(0.0, pop_p - boost)
+                probs["R&B"] = rnb_p + boost
+            elif country_p > rnb_p:
+                probs["Country"] = max(0.0, country_p - boost)
+                probs["R&B"] = rnb_p + boost
+
+    # 2: Jazz vs. Country / Pop (Rich tonnetz modulation, swing/rubato tempo instability, dynamic range)
+    if (country_p > jazz_p or pop_p > jazz_p) and jazz_p >= 0.15:
+        if tonnetz_vars_sum >= 0.010 and harmonic_ratio >= 0.48 and (tempo_stability >= 0.04 or dynamic_range >= 0.08):
+            boost = 0.20
+            if country_p > jazz_p:
+                probs["Country"] = max(0.0, country_p - boost)
+                probs["Jazz"] = jazz_p + boost
+            elif pop_p > jazz_p:
+                probs["Pop"] = max(0.0, pop_p - boost)
+                probs["Jazz"] = jazz_p + boost
+
+    # Normalize probabilities so sum is strictly 1.0
+    total = sum(probs.values())
+    if total > 0:
+        probs = {g: round(float(p / total), 4) for g, p in probs.items()}
+
+    return probs
 
 
 def predict_genre(
@@ -84,7 +166,7 @@ def predict_genre(
             - diagnostics: detailed telemetry (coverage, windows, per-segment probas, timing)
             - coverage: dict of original_duration, analyzed_duration, coverage_ratio
     """
-    if _MODEL_CACHE["model"] is None:
+    if _MODEL_CACHE["model"] is None or (artifacts_dir and _CURRENT_ARTIFACTS_DIR != artifacts_dir):
         load_artifacts(artifacts_dir)
 
     model = _MODEL_CACHE["model"]
@@ -216,7 +298,7 @@ def predict_genre(
             "segment_windows": [{"offset": w[0], "length": w[1]} for w in windows],
             "sample_rate": 22050,
             "channels": 1,
-            "feature_dim": 89,
+            "feature_dim": len(FEATURE_NAMES),
             "model_name": type(model).__name__,
             "scaler_name": type(scaler).__name__,
             "aggregation_method": aggregation,
@@ -270,6 +352,9 @@ def predict_genre(
 
     # Construct final class probability distribution
     prob_dict = {str(genre): round(float(p), 4) for genre, p in zip(classes, final_proba)}
+
+    # Phase 5: Post-Prediction Confusion Guard
+    prob_dict = apply_confusion_guards(prob_dict, rep_vector, feat_names)
 
     # Sort genres by probability descending
     sorted_genres = sorted(prob_dict.items(), key=lambda item: item[1], reverse=True)

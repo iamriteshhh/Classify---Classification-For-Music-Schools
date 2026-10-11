@@ -102,7 +102,8 @@ def test_regression_guard_aborts_on_poor_candidate():
         }]
 
         with patch("classify.ml.active_learning.extract_feature_vector") as mock_feat:
-            mock_feat.return_value = (np.zeros(89, dtype=np.float32), ["f"] * 89)
+            from classify.ml.feature_pipeline import FEATURE_NAMES
+            mock_feat.return_value = (np.zeros(len(FEATURE_NAMES), dtype=np.float32), ["f"] * len(FEATURE_NAMES))
 
             with patch("classify.ml.active_learning.evaluate_model_on_golden_set") as mock_eval:
                 # 1st call is baseline evaluation (85%), 2nd call is candidate (60%)

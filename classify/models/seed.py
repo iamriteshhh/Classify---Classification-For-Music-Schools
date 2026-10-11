@@ -145,6 +145,19 @@ GENRE_SEED_DATA = [
             {"name": "Dub", "slug": "dub", "description": "Instrumental reggae remixes featuring heavy echo, reverb effects, and dominant bass dropouts."},
         ],
     },
+    {
+        "name": "R&B",
+        "slug": "rnb",
+        "description": "Rhythm and Blues: A soulful, expressive genre characterized by lush vocal melodies, extended harmonic chords, deep syncopated grooves, and rich modern production.",
+        "history": "Originated in African American communities in the 1940s, evolving from rhythm and blues into soul, funk, and contemporary R&B across the 1980s to the present.",
+        "typical_structures": "Verse-chorus structure with pre-chorus tension builds, vocal melismas, bridge modulations, and extended ad-lib outros.",
+        "common_instrumentation": "Electric piano (Rhodes), synthesizers, 808 sub-bass, acoustic/electronic drums, lush vocal harmonies.",
+        "subgenres": [
+            {"name": "Contemporary R&B", "slug": "contemporary-rnb", "description": "Polished modern production blending soul vocals with hip-hop and electronic grooves."},
+            {"name": "Soul", "slug": "soul", "description": "Raw, emotive vocals rooted in gospel with warm horn sections and driving rhythm."},
+            {"name": "Neo-Soul", "slug": "neo-soul", "description": "1990s organic fusion of vintage soul, jazz harmony, and hip-hop beats."},
+        ],
+    },
 ]
 
 

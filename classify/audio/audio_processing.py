@@ -11,6 +11,7 @@ Part of Phase 0 & Phase 3 for CLASSIFY.
 """
 
 import os
+from typing import Optional
 import numpy as np
 import librosa
 import soundfile as sf
@@ -21,12 +22,13 @@ import pyloudnorm as pyln
 def apply_lowpass_filter(
     y: np.ndarray,
     sr: int = 22050,
-    cutoff: float = 8000.0,
+    cutoff: float = 12000.0,
     order: int = 4,
 ) -> np.ndarray:
     """
-    Applies a 4th-order Butterworth low-pass filter at cutoff (default 8,000 Hz).
-    Harmonizes all incoming audio with GTZAN's 8kHz acquisition ceiling,
+    Applies a 4th-order Butterworth low-pass filter at cutoff (default 12,000 Hz).
+    Harmonizes incoming audio while preserving genre-discriminative high-frequency content
+    (such as hi-hat shimmer, cymbal overtones, and vocal air),
     eliminating the high-frequency shortcut that causes modern uploads to
     pathologically collapse into the Ambient class.
     """
@@ -99,13 +101,13 @@ def preprocess_audio_signal(
     sr: int = 22050,
     apply_filter: bool = True,
     apply_lufs: bool = True,
-    cutoff: float = 8000.0,
+    cutoff: float = 12000.0,
     target_lufs: float = -14.0,
 ) -> np.ndarray:
     """
-    Standard Phase 0 preprocessing pipeline applied to all audio signals
+    Standard preprocessing pipeline applied to all audio signals
     before acoustic feature extraction:
-      1. Butterworth 4th-order 8kHz Low-Pass Filter
+      1. Butterworth 4th-order 12kHz Low-Pass Filter
       2. ITU-R BS.1770-4 -14.0 LUFS Loudness Normalization
     """
     if y is None or len(y) == 0:
@@ -207,6 +209,64 @@ def extract_features_from_signal(
     mel_mean = float(np.mean(mel_spec))
     mel_var = float(np.var(mel_spec))
 
+    # 8. Advanced Harmonic & Tonal Complexity (Phase 1 Expansion for R&B & Jazz Discrimination)
+    # Harmonic vs. Percussive Energy Ratio (HPSS)
+    try:
+        y_harm, y_perc = librosa.effects.hpss(y)
+        h_rms = float(np.mean(librosa.feature.rms(y=y_harm)))
+        p_rms = float(np.mean(librosa.feature.rms(y=y_perc)))
+        harmonic_ratio = float(h_rms / (h_rms + p_rms + 1e-9))
+    except Exception:
+        harmonic_ratio = 0.5
+
+    # Spectral Flatness (tonality vs noisiness)
+    try:
+        flatness = librosa.feature.spectral_flatness(y=y)
+        spectral_flatness_mean = float(np.mean(flatness))
+        spectral_flatness_var = float(np.var(flatness))
+    except Exception:
+        spectral_flatness_mean = 0.0
+        spectral_flatness_var = 0.0
+
+    # Tonnetz Tonal Centroids (6D space: 5ths, minor/major 3rds)
+    try:
+        tonnetz = librosa.feature.tonnetz(chroma=chroma)
+        tonnetz_means = [float(v) for v in np.mean(tonnetz, axis=1)]
+        tonnetz_vars = [float(v) for v in np.var(tonnetz, axis=1)]
+    except Exception:
+        tonnetz_means = [0.0] * 6
+        tonnetz_vars = [0.0] * 6
+
+    # Dynamic Range (95th - 5th percentile of RMS frames)
+    try:
+        rms_flat = rms.flatten()
+        dynamic_range = float(np.percentile(rms_flat, 95) - np.percentile(rms_flat, 5))
+    except Exception:
+        dynamic_range = 0.0
+
+    # Tempo Stability (Standard deviation of inter-beat intervals)
+    try:
+        if len(beats) > 2:
+            beat_times = librosa.frames_to_time(beats, sr=sr)
+            tempo_stability = float(np.std(np.diff(beat_times)))
+        else:
+            tempo_stability = 0.0
+    except Exception:
+        tempo_stability = 0.0
+
+    # Bass Spectral Centroid (Sub-300Hz low-end frequency center)
+    try:
+        S = np.abs(librosa.stft(y))
+        freqs = librosa.fft_frequencies(sr=sr)
+        bass_mask = freqs <= 300
+        if np.any(bass_mask) and np.sum(S[bass_mask, :]) > 1e-9:
+            bass_sc = np.sum(freqs[bass_mask, np.newaxis] * S[bass_mask, :], axis=0) / (np.sum(S[bass_mask, :], axis=0) + 1e-9)
+            bass_spectral_centroid = float(np.mean(bass_sc))
+        else:
+            bass_spectral_centroid = 0.0
+    except Exception:
+        bass_spectral_centroid = 0.0
+
     # 9. Musical Key & Mode Detection (Phase 3 Task 3.2 - Krumhansl-Schmuckler algorithm)
     key_info = detect_musical_key(chroma_means)
 
@@ -216,8 +276,8 @@ def extract_features_from_signal(
     # 11. Chord Progression Detection (Phase 4 Task 4.2)
     chord_info = detect_chord_progression(chroma=chroma, y=y, sr=sr)
 
-    # 12. Vocal vs. Instrumental Detection (Phase 4 Task 4.3)
-    vocal_info = detect_vocal_presence(y=y, sr=sr)
+    # 12. Vocal vs. Instrumental Detection (Phase 4 Task 4.3 - Reusing precomputed HPSS)
+    vocal_info = detect_vocal_presence(y=y, sr=sr, y_harm=y_harm, y_perc=y_perc)
 
     # Return comprehensive technical features dictionary
     features = {
@@ -285,6 +345,16 @@ def extract_features_from_signal(
         # Mel-Spectrogram summary
         "mel_spectrogram_mean": round(mel_mean, 4),
         "mel_spectrogram_var": round(mel_var, 4),
+
+        # Tonal & Harmonic Descriptors (Phase 1 Expansion for R&B & Jazz)
+        "harmonic_ratio": round(harmonic_ratio, 4),
+        "spectral_flatness_mean": round(spectral_flatness_mean, 6),
+        "spectral_flatness_var": round(spectral_flatness_var, 6),
+        "tonnetz_means": tonnetz_means,
+        "tonnetz_vars": tonnetz_vars,
+        "dynamic_range": round(dynamic_range, 6),
+        "tempo_stability": round(tempo_stability, 6),
+        "bass_spectral_centroid": round(bass_spectral_centroid, 2),
     }
 
     return features
@@ -556,7 +626,12 @@ def detect_chord_progression(
         return default_result
 
 
-def detect_vocal_presence(y: np.ndarray, sr: int = 22050) -> dict:
+def detect_vocal_presence(
+    y: np.ndarray,
+    sr: int = 22050,
+    y_harm: Optional[np.ndarray] = None,
+    y_perc: Optional[np.ndarray] = None,
+) -> dict:
     """
     Detects presence of human vocals vs. instrumental performance.
     Combines vocal formant frequency band ratio (300-3400 Hz),
@@ -574,8 +649,9 @@ def detect_vocal_presence(y: np.ndarray, sr: int = 22050) -> dict:
         return default_result
 
     try:
-        # Harmonic vs Percussive energy separation
-        y_harm, y_perc = librosa.effects.hpss(y)
+        # Harmonic vs Percussive energy separation (reused if precomputed)
+        if y_harm is None or y_perc is None:
+            y_harm, y_perc = librosa.effects.hpss(y)
         harm_energy = float(np.sum(y_harm ** 2))
         perc_energy = float(np.sum(y_perc ** 2))
         total_energy = harm_energy + perc_energy + 1e-9

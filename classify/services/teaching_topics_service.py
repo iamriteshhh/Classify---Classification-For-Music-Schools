@@ -107,6 +107,15 @@ GENRE_PEDAGOGICAL_GUIDELINES = {
         ],
         "listening_focus": "Deep sub-bass fundamentals and rhythmic space without cluttering the off-beat chops.",
     },
+    "R&B": {
+        "core_topics": [
+            "Vocal Ornamentation, Melisma & Dynamic Expression",
+            "Extended Harmonic Colors (Major 9th, Minor 11th & Sus Chords)",
+            "Syncopated Groove Pocket & Laid-Back Phrasing",
+            "Call-and-Response Vocal Layering & Harmony Stacks",
+        ],
+        "listening_focus": "Warm low-end balance between sub-bass and kick; intimate vocal presence in the 1–4 kHz range without sibilance.",
+    },
 }
 
 

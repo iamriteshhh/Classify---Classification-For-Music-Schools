@@ -1,7 +1,7 @@
 {
   "summary": {
-    "total_candidates_examined": 1019,
-    "total_accepted": 1019,
+    "total_candidates_examined": 1508,
+    "total_accepted": 1508,
     "total_rejected": 0,
     "acceptance_rate": 1.0
   },
@@ -15,19 +15,19 @@
       "rejected": 0
     },
     "Country": {
-      "accepted": 98,
+      "accepted": 138,
       "rejected": 0
     },
     "Disco": {
-      "accepted": 93,
+      "accepted": 133,
       "rejected": 0
     },
     "Hip-Hop": {
-      "accepted": 92,
+      "accepted": 137,
       "rejected": 0
     },
     "Jazz": {
-      "accepted": 86,
+      "accepted": 151,
       "rejected": 0
     },
     "Metal": {
@@ -35,19 +35,23 @@
       "rejected": 0
     },
     "Pop": {
-      "accepted": 84,
+      "accepted": 129,
       "rejected": 0
     },
     "Reggae": {
-      "accepted": 86,
+      "accepted": 151,
       "rejected": 0
     },
     "Rock": {
-      "accepted": 100,
+      "accepted": 135,
       "rejected": 0
     },
     "Ambient": {
       "accepted": 90,
+      "rejected": 0
+    },
+    "R&B": {
+      "accepted": 154,
       "rejected": 0
     }
   },
@@ -57,7 +61,11 @@
       "rejected": 0
     },
     "FMA": {
-      "accepted": 90,
+      "accepted": 184,
+      "rejected": 0
+    },
+    "Jamendo": {
+      "accepted": 395,
       "rejected": 0
     }
   },

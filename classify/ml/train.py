@@ -43,14 +43,26 @@ def compute_manifest_checksum(manifest_rows: List[Dict[str, Any]]) -> str:
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16]
 
 
+from joblib import Parallel, delayed
+
+
+def _extract_single_track(row: Dict[str, Any], base_dir: str) -> Tuple[np.ndarray, str]:
+    """Helper function to extract 108-dim feature vector for a single track (multiprocessing safe)."""
+    rel_track = row["track_path"]
+    abs_track = os.path.join(base_dir, rel_track) if not os.path.isabs(rel_track) else rel_track
+    vec, _ = extract_feature_vector(abs_track)
+    return vec, row["genre"]
+
+
 def extract_or_load_dataset_features(
     manifest_rows: List[Dict[str, Any]],
     cache_dir: Optional[str] = None,
     force_refresh: bool = False,
 ):
     """
-    Extracts 89-dim feature vectors for all tracks in manifest_rows,
+    Extracts 108-dim feature vectors for all tracks in manifest_rows,
     caching to disk for fast iteration and reproducibility.
+    Uses multi-core parallel processing across available CPU cores.
     """
     cdir = cache_dir or CACHE_DIR
     os.makedirs(cdir, exist_ok=True)
@@ -62,24 +74,22 @@ def extract_or_load_dataset_features(
         cached = joblib.load(cache_file)
         return cached["X"], cached["y_raw"], cached["feature_names"], m_hash
 
-    print(f"Extracting features for {len(manifest_rows)} audio tracks with multi-segment sampling...")
+    print(f"Extracting features for {len(manifest_rows)} audio tracks with multi-segment sampling in parallel (n_jobs=-1)...")
     t0 = time.time()
-    X_list = []
-    y_list = []
 
-    for idx, row in enumerate(manifest_rows):
-        rel_track = row["track_path"]
-        abs_track = os.path.join(BASE_DIR, rel_track) if not os.path.isabs(rel_track) else rel_track
+    results = Parallel(n_jobs=-1, batch_size=8, verbose=5)(
+        delayed(_extract_single_track)(row, BASE_DIR)
+        for row in manifest_rows
+    )
 
-        vec, feat_names = extract_feature_vector(abs_track)
-        X_list.append(vec)
-        y_list.append(row["genre"])
-
-        if (idx + 1) % 100 == 0 or (idx + 1) == len(manifest_rows):
-            print(f"  Processed {idx + 1}/{len(manifest_rows)} tracks ({time.time() - t0:.1f}s)")
+    X_list = [r[0] for r in results]
+    y_list = [r[1] for r in results]
+    feat_names = FEATURE_NAMES
 
     X = np.array(X_list, dtype=np.float32)
     y_raw = np.array(y_list)
+    elapsed = time.time() - t0
+    print(f"Feature extraction completed in {elapsed:.1f}s ({elapsed / max(len(manifest_rows), 1):.2f}s/track)")
 
     # Save to cache
     joblib.dump(
@@ -108,26 +118,30 @@ def tune_and_evaluate_candidates(
         "Random Forest": {
             "model_cls": RandomForestClassifier,
             "grid": [
-                {"n_estimators": 100, "max_depth": 10, "min_samples_leaf": 1, "random_state": random_state},
-                {"n_estimators": 200, "max_depth": 15, "min_samples_leaf": 1, "random_state": random_state},
-                {"n_estimators": 200, "max_depth": 20, "min_samples_leaf": 2, "random_state": random_state},
-                {"n_estimators": 300, "max_depth": None, "min_samples_leaf": 1, "random_state": random_state},
+                {"n_estimators": 100, "max_depth": 10, "min_samples_leaf": 1, "class_weight": "balanced", "random_state": random_state},
+                {"n_estimators": 200, "max_depth": 15, "min_samples_leaf": 1, "class_weight": "balanced", "random_state": random_state},
+                {"n_estimators": 200, "max_depth": 20, "min_samples_leaf": 2, "class_weight": "balanced", "random_state": random_state},
+                {"n_estimators": 300, "max_depth": None, "min_samples_leaf": 1, "class_weight": "balanced", "random_state": random_state},
             ],
         },
         "HistGradientBoosting": {
             "model_cls": HistGradientBoostingClassifier,
             "grid": [
-                {"max_iter": 100, "learning_rate": 0.1, "max_depth": 8, "random_state": random_state},
-                {"max_iter": 150, "learning_rate": 0.05, "max_depth": 10, "random_state": random_state},
-                {"max_iter": 200, "learning_rate": 0.05, "max_depth": None, "random_state": random_state},
+                {"max_iter": 100, "learning_rate": 0.1, "max_depth": 8, "class_weight": "balanced", "random_state": random_state},
+                {"max_iter": 150, "learning_rate": 0.05, "max_depth": 10, "class_weight": "balanced", "random_state": random_state},
+                {"max_iter": 200, "learning_rate": 0.05, "max_depth": None, "class_weight": "balanced", "random_state": random_state},
             ],
         },
         "Support Vector Machine (RBF)": {
             "model_cls": SVC,
             "grid": [
-                {"kernel": "rbf", "C": 4.5, "gamma": 0.007, "probability": True, "random_state": random_state},
-                {"kernel": "rbf", "C": 5.0, "gamma": 0.007, "probability": True, "random_state": random_state},
-                {"kernel": "rbf", "C": 5.5, "gamma": 0.007, "probability": True, "random_state": random_state},
+                {"kernel": "rbf", "C": 4.0, "gamma": 0.005, "class_weight": "balanced", "probability": True, "random_state": random_state},
+                {"kernel": "rbf", "C": 5.0, "gamma": 0.005, "class_weight": "balanced", "probability": True, "random_state": random_state},
+                {"kernel": "rbf", "C": 5.0, "gamma": 0.007, "class_weight": "balanced", "probability": True, "random_state": random_state},
+                {"kernel": "rbf", "C": 6.0, "gamma": 0.007, "class_weight": "balanced", "probability": True, "random_state": random_state},
+                {"kernel": "rbf", "C": 8.0, "gamma": 0.005, "class_weight": "balanced", "probability": True, "random_state": random_state},
+                {"kernel": "rbf", "C": 10.0, "gamma": 0.003, "class_weight": "balanced", "probability": True, "random_state": random_state},
+                {"kernel": "rbf", "C": 10.0, "gamma": 0.005, "class_weight": "balanced", "probability": True, "random_state": random_state},
             ],
         },
         "K-Nearest Neighbors": {
@@ -266,9 +280,10 @@ def train_and_evaluate(manifest_path=None, artifacts_dir=None, random_state=42, 
     )
 
     # 3. Fit Scaler strictly on Train data
+    k_features = min(100, X_train.shape[1])
     scaler = Pipeline([
         ("power_transform", PowerTransformer(method="yeo-johnson")),
-        ("select_k_best", SelectKBest(f_classif, k=86)),
+        ("select_k_best", SelectKBest(f_classif, k=k_features)),
     ])
     X_train_scaled = scaler.fit_transform(X_train, y_train)
     X_val_scaled = scaler.transform(X_val)
@@ -299,9 +314,10 @@ def train_and_evaluate(manifest_path=None, artifacts_dir=None, random_state=42, 
     }
     winning_model = model_classes[winner_name](**winner_params)
 
+    k_features_full = min(100, X_train_val.shape[1])
     scaler_full = Pipeline([
         ("power_transform", PowerTransformer(method="yeo-johnson")),
-        ("select_k_best", SelectKBest(f_classif, k=86)),
+        ("select_k_best", SelectKBest(f_classif, k=k_features_full)),
     ])
     X_train_val_scaled = scaler_full.fit_transform(X_train_val, y_train_val)
     X_test_final_scaled = scaler_full.transform(X_test)

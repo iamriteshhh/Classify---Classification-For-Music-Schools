@@ -281,6 +281,38 @@ SUBGENRE_PROFILES: Dict[str, List[Dict[str, Any]]] = {
             ),
         },
     ],
+    "R&B": [
+        {
+            "name": "Contemporary R&B",
+            "slug": "contemporary-rnb",
+            "description": "Polished modern production blending soul vocals with hip-hop and electronic grooves.",
+            "rules": lambda f: (
+                (1.0 if f.get("tempo", 95.0) >= 90 else 0.0) * 0.4 +
+                (1.0 if f.get("spectral_centroid_mean", 0.0) > 2000 else 0.0) * 0.3 +
+                (1.0 if f.get("onset_strength_mean", 0.0) > 1.1 else 0.0) * 0.3
+            ),
+        },
+        {
+            "name": "Soul",
+            "slug": "soul",
+            "description": "Raw, emotive vocals rooted in gospel with warm horn sections and driving rhythm.",
+            "rules": lambda f: (
+                (1.0 if 75 <= f.get("tempo", 95.0) <= 115 else 0.0) * 0.4 +
+                (1.0 if f.get("spectral_contrast_mean", 0.0) > 20.0 else 0.0) * 0.3 +
+                (1.0 if f.get("rms_mean", 0.0) > 0.10 else 0.0) * 0.3
+            ),
+        },
+        {
+            "name": "Neo-Soul",
+            "slug": "neo-soul",
+            "description": "1990s organic fusion of vintage soul, jazz harmony, and hip-hop beats.",
+            "rules": lambda f: (
+                (1.0 if f.get("tempo", 95.0) < 95 else 0.0) * 0.4 +
+                (1.0 if f.get("spectral_centroid_mean", 0.0) < 2200 else 0.0) * 0.3 +
+                (1.0 if f.get("rms_mean", 0.0) < 0.12 else 0.0) * 0.3
+            ),
+        },
+    ],
 }
 
 
